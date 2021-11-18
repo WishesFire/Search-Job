@@ -6,7 +6,9 @@ def create_app():
     app.config.from_object("app.configs.config.TestBaseConfig")
 
     from .views.main import base_view
+    from .views.vacancies import vacancies_view
 
     app.register_blueprint(base_view, url_prefix="/")
+    app.register_blueprint(vacancies_view, url_prefix="/")
 
     return app
