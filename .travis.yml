@@ -1,0 +1,15 @@
+language: python
+
+python:
+  - "3.8"
+  - "3.9"
+
+install:
+  - pip install - requirements.txt
+
+script:
+  - pytest
+  - pylint --output-format=text app.py
+
+after_success:
+  - coveralls
