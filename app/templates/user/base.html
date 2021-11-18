@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- Module area title -->
+    <title>{% block title %}{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Module area css -->
+    {% block css %}
+    {% endblock %}
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap/css/bootstrap.css') }}">
+</head>
+<body class="background-style">
+    <!-- Module area content -->
+    {% block content %}
+    {% endblock %}
+
+    <!-- Module area js -->
+    {% block js %}
+    {% endblock %}
+    <!-- Bootstrap core JavaScript -->
+    <script src="{{ url_for('static', filename='bootstrap/js/bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery-3.6.0.min.js') }}"></script>
+</body>
+</html>

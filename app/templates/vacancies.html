@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% block title %}Vacancies from {% endblock %}
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+{% endblock %}
+{% block content %}
+    <h1 class="categories-title">Vacancies </h1>
+    <div class="card">
+      <h5 class="card-header">Featured</h5>
+      <div class="card-body">
+        <h5 class="card-title">Special title treatment</h5>
+        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+        <a href="#" class="btn btn-primary">Go somewhere</a>
+      </div>
+    </div>
+    <div class="card">
+      <h5 class="card-header">Featured</h5>
+      <div class="card-body">
+        <h5 class="card-title">Special title treatment</h5>
+        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+        <a href="#" class="btn btn-primary">Go somewhere</a>
+      </div>
+    <div class="card">
+        <article class="card-group-item">
+            <header class="card-header"><h6 class="title">Similar category </h6></header>
+            <div class="filter-content">
+                <div class="card-body">
+                    <label class="btn btn-danger">
+                      <input class="" type="checkbox" name="myradio" value="">
+                      <span class="form-check-label">Red</span>
+                    </label>
+                    <label class="btn btn-success">
+                      <input class="" type="checkbox" name="myradio" value="">
+                      <span class="form-check-label">Green</span>
+                    </label>
+                    <label class="btn btn-primary">
+                      <input class="" type="checkbox" name="myradio" value="">
+                      <span class="form-check-label">Blue</span>
+                    </label>
+                </div>
+            </div>
+        </article>
+        <article class="card-group-item">
+            <header class="card-header"><h6 class="title">Color check</h6></header>
+            <div class="filter-content">
+                <div class="card-body">
+                    <label class="btn btn-danger">
+                      <input class="" type="checkbox" name="myradio" value="">
+                      <span class="form-check-label">Red</span>
+                    </label>
+                    <label class="btn btn-success">
+                      <input class="" type="checkbox" name="myradio" value="">
+                      <span class="form-check-label">Green</span>
+                    </label>
+                    <label class="btn btn-primary">
+                      <input class="" type="checkbox" name="myradio" value="">
+                      <span class="form-check-label">Blue</span>
+                    </label>
+                </div>
+            </div>
+        </article>
+    </div>
+    </div>
+{% endblock %}
