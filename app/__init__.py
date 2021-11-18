@@ -2,6 +2,9 @@ from flask import Flask
 
 
 def create_app():
+    """
+    :return: app
+    """
     app = Flask(__name__, static_url_path="", static_folder="static", template_folder="templates")
     app.config.from_object("app.configs.config.TestBaseConfig")
 
