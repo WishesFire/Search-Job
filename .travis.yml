@@ -1,15 +1,14 @@
 language: python
 
 python:
-  - "3.8"
   - "3.9"
 
 install:
   - pip install -r requirements.txt
 
 script:
-  - pytest
   - pylint --output-format=text app.py
+  - py.test --doctest-modules --pep8 coveralls -v --cov coveralls --cov-report term-missing --pylint
 
 after_success:
   - coveralls

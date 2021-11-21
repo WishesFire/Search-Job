@@ -10,7 +10,11 @@ def client():
         yield client
 
 
-def test_status(client):
+def test_status_main(client):
     res = client.get("/")
-    assert 200 == res.status
+    assert 200 == res.status_code
 
+
+def test_status_categories(client):
+    res = client.get("/categories")
+    assert 200 == res.status_code
