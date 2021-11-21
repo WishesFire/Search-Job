@@ -22,12 +22,14 @@ py==1.11.0
 pylint==2.11.1
 pyparsing==3.0.6
 pytest==6.2.5
+pytest-cov==3.0.0
 pytest-pylint==0.18.0
 python-coveralls==2.9.3
 PyYAML==6.0
 requests==2.26.0
 six==1.16.0
 toml==0.10.2
+tomli==1.2.2
 typing_extensions==4.0.0
 urllib3==1.26.7
 Werkzeug==2.0.2
