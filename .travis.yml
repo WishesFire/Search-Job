@@ -8,7 +8,7 @@ install:
 
 script:
   - pylint --output-format=text app.py
-  - py.test --doctest-modules --pep8 coveralls -v --cov coveralls --cov-report term-missing --pylint
+  - py.test app/tests/test_views.py --doctest-modules --pep8 coveralls -v --cov coveralls --cov-report term-missing --pylint
 
 after_success:
   - coveralls
