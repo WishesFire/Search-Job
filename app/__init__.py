@@ -1,17 +1,22 @@
 from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
+from flask_login import LoginManager
+from app.routes import register_handlers
+
+
+db = SQLAlchemy()
+migrate = Migrate()
+login_manager = LoginManager()
 
 
 def create_app():
-    """
-    :return: app
-    """
     app = Flask(__name__, static_url_path="", static_folder="static", template_folder="templates")
     app.config.from_object("app.configs.config.TestBaseConfig")
+    db.init_app(app)
+    migrate.init_app(app, db)
+    login_manager.init_app(app)
 
-    from .views.main import base_view
-    from .views.vacancies import vacancies_view
-
-    app.register_blueprint(base_view, url_prefix="/")
-    app.register_blueprint(vacancies_view, url_prefix="/")
+    register_handlers(app)
 
     return app
