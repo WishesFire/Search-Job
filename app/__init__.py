@@ -2,7 +2,6 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
-from app.routes import register_handlers
 
 
 db = SQLAlchemy()
@@ -18,7 +17,12 @@ def create_app():
     login_manager.init_app(app)
     login_manager.login_view = 'auth.login'
 
-    from app.models.model import Category, Vacancy, User, Profile, init_categories
+    @login_manager.user_loader
+    def load_user(user):
+        return User.query.get(user)
+
+    from app.models.model import Category, Vacancy, User
+    from app.routes import register_handlers
 
     register_handlers(app)
 

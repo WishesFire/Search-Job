@@ -1,8 +1,11 @@
 from dotenv import load_dotenv
 from os import environ
+import os
 
 
 load_dotenv()
+
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 
 class TestBaseConfig(object):
@@ -20,3 +23,4 @@ class TestBaseConfig(object):
 
 class ProductionBaseConfig(TestBaseConfig):
     DEBUG = False
+    TESTING = False

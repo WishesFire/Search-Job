@@ -9,7 +9,7 @@ class Category(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False, unique=True)
     slug = db.Column(db.String(100))
-    vacancies = db.relationship("Vacancy", backref="category")
+    vacancies = db.relationship("Vacancy")
 
     def __init__(self, *args, **kwargs):
         if "slug" not in kwargs:
@@ -36,27 +36,13 @@ class Vacancy(db.Model):
         return "Vacancy"
 
 
-def init_categories():
-    db.create_all()
-    db.session.add()
-    db.session.commit()
-
-
 class User(UserMixin, db.Model):
     __tablename__ = "user"
 
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(100), unique=True, nullable=False)
     password = db.Column(db.String(100), nullable=False)
+    vacancies = db.relationship("Vacancy")
 
     def __repr__(self):
         return f'Users {self.id}'
-
-
-class Profile(db.Model):
-    __tablename__ = "profile"
-
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    vacancies = db.relationship("Vacancy")
-
