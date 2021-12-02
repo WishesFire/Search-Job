@@ -3,6 +3,9 @@ language: python
 python:
   - "3.9"
 
+services:
+  - mysql
+
 install:
   - pip install -r requirements.txt
 
