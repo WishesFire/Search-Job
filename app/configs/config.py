@@ -1,3 +1,7 @@
+"""
+Configs for server
+"""
+
 from dotenv import load_dotenv
 from os import environ
 import os
@@ -12,8 +16,10 @@ class TestBaseConfig(object):
     SECRET_KEY = environ.get("SECRET_KEY")
     HOST = environ.get("HOST")
     PORT = environ.get("PORT")
+
     TESTING = True
     DEBUG = True
+
     DB_USERNAME = environ.get("DB_USERNAME")
     DB_PASSWORD = environ.get("DB_PASSWORD")
     DB_NAME = environ.get("DB_NAME")

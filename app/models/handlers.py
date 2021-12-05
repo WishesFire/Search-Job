@@ -1,3 +1,8 @@
+"""
+This model defines is used to populate database with categories
+    -`init_start_categories`: create new categories
+"""
+
 from app import db
 from app.models.model import Category
 
@@ -6,8 +11,12 @@ CATEGORIES = {"Designer", "Accountant", "Lawyer", "Programmer",
 
 
 def init_start_categories(app):
+    """
+    Populate database with categories
+    :param app: flask object
+    """
     with app.app_context():
         for index, category in enumerate(CATEGORIES):
             new_category = Category(id=index+1, name=category)
             db.session.add(new_category)
-            db.session.commit()
+        db.session.commit()

@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'user/base.html' %}
 {% block title %}Registration{% endblock %}
 {% block content %}
 <section class="vh-100 gradient-custom">
@@ -8,13 +8,13 @@
         <div class="card shadow-2-strong card-registration" style="border-radius: 15px;">
           <div class="card-body p-4 p-md-5">
             <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Registration Form</h3>
-            <form>
+            <form method="post">
 
               <div class="row">
                 <div class="col-md-6 mb-4">
                   <div class="form-outline">
-                    <input type="email" id="emailAddress" class="form-control form-control-lg" />
                     <label class="form-label" for="emailAddress">Email</label>
+                    <input type="email" id="emailAddress" name="emailAddress" class="form-control form-control-lg" />
                   </div>
                 </div>
               </div>
@@ -22,8 +22,8 @@
               <div class="row">
                 <div class="col-md-6 mb-4">
                   <div class="form-outline">
-                    <input type="text" id="password1" class="form-control form-control-lg" />
                     <label class="form-label" for="password1">Password</label>
+                    <input type="password" id="password1" name="password1" class="form-control form-control-lg" />
                   </div>
                 </div>
               </div>
@@ -31,8 +31,8 @@
               <div class="row">
                 <div class="col-md-6 mb-4">
                   <div class="form-outline">
-                    <input type="text" id="password2" class="form-control form-control-lg" />
                     <label class="form-label" for="password2">Confirm password</label>
+                    <input type="password" id="password2" name="password2" class="form-control form-control-lg" />
                   </div>
                 </div>
               </div>

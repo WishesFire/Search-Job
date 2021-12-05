@@ -1,4 +1,10 @@
+"""
+Views:
+    - `home (/)`: Show main page with information about project
+"""
+
 from flask import Blueprint, render_template
+from flask_login import current_user
 
 
 base_view = Blueprint('base', __name__)
@@ -6,4 +12,8 @@ base_view = Blueprint('base', __name__)
 
 @base_view.route("/", methods=["GET"])
 def home():
-    return render_template("main_page.html")
+    """
+    Show main home page
+    :return: rendered template
+    """
+    return render_template("main_page.html", user=current_user)
