@@ -10,11 +10,9 @@ services:
   - mysql
 
 before_install:
-  - sudo mysql -e "use mysql; update user set authentication_string=PASSWORD('toor') where User='root'; update user set plugin='mysql_native_password';"
+  - sudo mysql -e "use mysql; update user set authentication_string=PASSWORD('toor') where User='root'; update user set plugin='mysql_native_password';FLUSH PRIVILEGES;"
+  - sudo mysql_upgrade
   - sudo service mysql restart
-  - flask db init
-  - flask db migrate -m "init"
-  - flask db upgrade
 
 script:
   # - pylint app
