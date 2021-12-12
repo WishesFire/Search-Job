@@ -17,6 +17,7 @@ def created_test_db():
     app = create_app()
     app.config["TESTING"] = True
     with app.app_context() as created_db:
+        db.create_all()
         yield created_db
 
 
@@ -38,6 +39,7 @@ def before_user_access(flag):
     """
     app = create_app()
     with app.app_context():
+        db.create_all()
         if flag:
             result = User.query.filter_by(email=InitTestDataDB.USER_EMAIL).first()
             if not result:
@@ -57,6 +59,7 @@ def after_user_delete():
     """
     app = create_app()
     with app.app_context():
+        db.create_all()
         User.query.filter_by(email=InitTestDataDB.USER_EMAIL).delete()
 
 
