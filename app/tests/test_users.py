@@ -8,13 +8,14 @@ from app import db
 
 STATUS_CODE = 200
 
+app = create_app()
+
 
 @pytest.fixture
 def created_test_db():
     """
     Create app context for db operations
     """
-    app = create_app()
     app.config["TESTING"] = True
     with app.app_context() as created_db:
         db.create_all()
@@ -27,7 +28,6 @@ def client():
     Create new application as client
     :return: copy app client
     """
-    app = create_app()
     app.config["TESTING"] = True
     with app.test_client() as client:
         yield client
@@ -37,7 +37,6 @@ def before_user_access(flag):
     """
     Check user exists
     """
-    app = create_app()
     with app.app_context():
         db.create_all()
         if flag:
@@ -57,7 +56,6 @@ def after_user_delete():
     """
     Delete user after test
     """
-    app = create_app()
     with app.app_context():
         db.create_all()
         User.query.filter_by(email=InitTestDataDB.USER_EMAIL).delete()

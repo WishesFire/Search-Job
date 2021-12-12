@@ -4,13 +4,14 @@ from app import db
 from app.models.model import Category
 from app.models.handlers import init_start_categories
 
+app = create_app()
+
 
 @pytest.fixture
 def created_test_db():
     """
     Create app context for db operations
     """
-    app = create_app()
     app.config["TESTING"] = True
     with app.app_context() as created_db:
         db.create_all()
@@ -22,10 +23,11 @@ def test_integrity_category_check(created_test_db):
     Check element in category model
     :param created_test_db: app context
     """
-    result = Category.query.get(1)
-    if not result:
-        init_start_categories()
+    with app.app_context():
         result = Category.query.get(1)
+        if not result:
+            init_start_categories()
+            result = Category.query.get(1)
     assert result.name == "Designer"
 
 
