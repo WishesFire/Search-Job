@@ -6,6 +6,13 @@ python:
 install:
   - pip install -r requirements.txt
 
+services:
+  - mysql
+
+before_install:
+  - sudo mysql -e "use mysql; update user set authentication_string=PASSWORD('toor') where User='root'; update user set plugin='mysql_native_password';"
+  - sudo service mysql restart
+
 script:
   - pylint app
   - py.test --cov=app/tests/
@@ -13,3 +20,6 @@ script:
 
 after_success:
   - coveralls
+
+notifications:
+  email: false

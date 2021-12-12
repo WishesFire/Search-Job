@@ -11,7 +11,6 @@ from .views.error import error_view
 def register_handlers(app):
     """
     Register views
-    :return: None
     """
     app.register_blueprint(base_view, url_prefix="/")
     app.register_blueprint(vacancies_view, url_prefix="/")

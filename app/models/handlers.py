@@ -4,19 +4,26 @@ This model defines is used to populate database with categories
 """
 
 from app import db
-from app.models.model import Category
+from app.models.model import Category, User
+from app.configs.config import InitTestDataDB
+from werkzeug.security import generate_password_hash
 
-CATEGORIES = {"Designer", "Accountant", "Lawyer", "Programmer",
-              "Administrator", "Driver", "Cleaner", "Seller"}
 
-
-def init_start_categories(app):
+def init_start_categories():
     """
     Populate database with categories
-    :param app: flask object
     """
-    with app.app_context():
-        for index, category in enumerate(CATEGORIES):
-            new_category = Category(id=index+1, name=category)
-            db.session.add(new_category)
-        db.session.commit()
+    for index, category in enumerate(InitTestDataDB.CATEGORIES):
+        new_category = Category(id=index+1, name=category)
+        db.session.add(new_category)
+    db.session.commit()
+
+
+def init_test_user():
+    """
+    Populate database with user
+    """
+    secure_password = generate_password_hash(InitTestDataDB.USER_PASSWORD)
+    new_user = User(email=InitTestDataDB.USER_EMAIL, password=secure_password)
+    db.session.add(new_user)
+    db.session.commit()

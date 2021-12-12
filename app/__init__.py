@@ -18,6 +18,8 @@ Subpackages:
 """
 # pylint: disable=wrong-import-position
 from flask import Flask
+from .configs.config import TestBaseConfig
+from sqlalchemy_utils import database_exists, create_database
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
@@ -51,6 +53,13 @@ def create_app():
     @login_manager.user_loader
     def load_user(user_id):
         return User.query.get(int(user_id))
+
+    if not database_exists(TestBaseConfig.SQLALCHEMY_DATABASE_URI):
+        create_database(TestBaseConfig.SQLALCHEMY_DATABASE_URI)
+        db.create_all()
+
+        from .models.handlers import init_start_categories
+        init_start_categories()
 
     register_handlers(app)
 

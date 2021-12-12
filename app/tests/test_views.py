@@ -42,6 +42,7 @@ def test_config(created_app):
 
 def test_status_main(client):
     """
+    Check get main page
     / - main_page
     :param client: copy app client
     :return: Passed status if code is similar
@@ -52,9 +53,21 @@ def test_status_main(client):
 
 def test_status_categories(client):
     """
+    Check get categories page
     /categories - categories
     :param client: copy app client
     :return: Passed status if code is similar
     """
     res = client.get("/categories")
+    assert STATUS_CODE == res.status_code
+
+
+def test_status_vacancy(client):
+    """
+    Check get vacancies page
+    /<category_slug> - specific category
+    :param client: cope app client
+    :return: Passed status if code is similar
+    """
+    res = client.get("/designer")
     assert STATUS_CODE == res.status_code

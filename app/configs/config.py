@@ -27,6 +27,13 @@ class TestBaseConfig(object):
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 
+class InitTestDataDB:
+    CATEGORIES = {"Designer", "Accountant", "Lawyer", "Programmer",
+                  "Administrator", "Driver", "Cleaner", "Seller"}
+    USER_EMAIL = "aloha@gmail.com"
+    USER_PASSWORD = "fskdop1241kfspdf"
+
+
 class ProductionBaseConfig(TestBaseConfig):
     DEBUG = False
     TESTING = False
