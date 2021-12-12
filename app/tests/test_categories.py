@@ -38,17 +38,19 @@ def test_add_category(created_test_db):
     """
     category_example = "Testing"
 
-    check_exists = Category.query.filter_by(name=category_example).first()
-    if check_exists:
+    with app.app_context():
+        check_exists = Category.query.filter_by(name=category_example).first()
+        if check_exists:
+            Category.query.filter_by(name=category_example).delete()
+
+        new_category = Category(name=category_example)
+        db.session.add(new_category)
+        db.session.commit()
+
+        result = Category.query.filter_by(name=category_example).first()
+        assert result.name == "Testing"
+
         Category.query.filter_by(name=category_example).delete()
-
-    new_category = Category(name=category_example)
-    db.session.add(new_category)
-    db.session.commit()
-
-    result = Category.query.filter_by(name=category_example).first()
-    assert result.name == "Testing"
-    db.session.rollback()
 
 
 def test_get_vacancies_from_category(created_test_db):
