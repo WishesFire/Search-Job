@@ -9,21 +9,23 @@ from app.configs.config import InitTestDataDB
 from werkzeug.security import generate_password_hash
 
 
-def init_start_categories():
+def init_start_categories(app):
     """
     Populate database with categories
     """
-    for index, category in enumerate(InitTestDataDB.CATEGORIES):
-        new_category = Category(id=index+1, name=category)
-        db.session.add(new_category)
-    db.session.commit()
+    with app.app_context():
+        for index, category in enumerate(InitTestDataDB.CATEGORIES):
+            new_category = Category(id=index+1, name=category)
+            db.session.add(new_category)
+        db.session.commit()
 
 
-def init_test_user():
+def init_test_user(app):
     """
     Populate database with user
     """
-    secure_password = generate_password_hash(InitTestDataDB.USER_PASSWORD)
-    new_user = User(email=InitTestDataDB.USER_EMAIL, password=secure_password)
-    db.session.add(new_user)
-    db.session.commit()
+    with app.app_context():
+        secure_password = generate_password_hash(InitTestDataDB.USER_PASSWORD)
+        new_user = User(email=InitTestDataDB.USER_EMAIL, password=secure_password)
+        db.session.add(new_user)
+        db.session.commit()

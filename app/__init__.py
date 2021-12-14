@@ -60,7 +60,7 @@ def create_app():
             db.create_all()
 
         from .models.handlers import init_start_categories
-        init_start_categories()
+        init_start_categories(app)
 
     register_handlers(app)
 
