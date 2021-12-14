@@ -5,6 +5,8 @@ from app.models.model import Category
 
 app = create_app()
 
+CATEGORY_EXAMPLE = "Testing"
+
 
 @pytest.fixture
 def created_test_db():
@@ -16,41 +18,47 @@ def created_test_db():
         yield created_db
 
 
+def check_category(flag):
+    with app.app_context():
+        check_exists = Category.query.filter_by(name=CATEGORY_EXAMPLE).first()
+
+        if flag:
+            if check_exists:
+                Category.query.filter_by(name=CATEGORY_EXAMPLE).delete()
+
+                new_category = Category(name=CATEGORY_EXAMPLE)
+                db.session.add(new_category)
+                db.session.commit()
+        else:
+            if not check_exists:
+                new_category = Category(name=CATEGORY_EXAMPLE)
+                db.session.add(new_category)
+                db.session.commit()
+
+
 def test_add_category(created_test_db):
     """
     Check add element category in database
     """
-    category_example = "Testing"
 
     with app.app_context():
-        check_exists = Category.query.filter_by(name=category_example).first()
-        if check_exists:
-            Category.query.filter_by(name=category_example).delete()
+        check_category(True)
 
-        new_category = Category(name=category_example)
-        db.session.add(new_category)
-        db.session.commit()
-
-        result = Category.query.filter_by(name=category_example).first()
+        result = Category.query.filter_by(name=CATEGORY_EXAMPLE).first()
         assert result.name == "Testing"
 
-        Category.query.filter_by(name=category_example).delete()
+        Category.query.filter_by(name=CATEGORY_EXAMPLE).delete()
 
 
 def test_category_slug(created_test_db):
     """
     Check slug element category in database
     """
-    category_example = "Testing"
 
     with app.app_context():
-        check_exists = Category.query.filter_by(name=category_example).first()
-        if not check_exists:
-            new_category = Category(name=category_example)
-            db.session.add(new_category)
-            db.session.commit()
+        check_category(False)
 
-        result = Category.query.filter_by(name=category_example).first()
+        result = Category.query.filter_by(name=CATEGORY_EXAMPLE).first()
         assert result.slug
 
-        Category.query.filter_by(name=category_example).delete()
+        Category.query.filter_by(name=CATEGORY_EXAMPLE).delete()
