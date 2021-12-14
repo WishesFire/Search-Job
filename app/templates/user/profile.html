@@ -1,10 +1,30 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-</body>
-</html>
+{% extends 'base.html' %}
+{% block title %}Profile{% endblock %}
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+{% endblock %}
+{% block content %}
+    <div class="p-5 text-center">
+        <div class="mask" style="background-color: #f8f9fa;">
+          <div class="d-flex justify-content-center align-items-center h-100">
+            <div class="text-white">
+                <h1 class="mb-3" style="color: grey">Profile</h1>
+                <button style="background-color: #4CAF50;
+                            border: none; color: white; font-size: 36px; margin-bottom: 20px;
+                            padding: 25px 42px; text-align: center; text-decoration: none;">
+                    <a href="{{ url_for('vacancies.vacancy_create') }}">Create</a></button>
+                {% for vac in exists_vacancies %}
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="card-body" style="margin: 20px">
+                                <a href="{{ url_for('vacancies.vacancy_detail', vacancy_slug=vac.slug) }}">
+                                    {{ vac.name }}</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+          </div>
+        </div>
+    </div>
+{% endblock %}
