@@ -26,9 +26,13 @@
 
           <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink"
               style="position: absolute; left: 870px; bottom: -14px;">
-            <!-- Depends on authorization -->
-            <li><a class="dropdown-item" href="#">Profile</a></li>
-            <li><a class="dropdown-item" href="#">Exit</a></li>
+            {% if user.is_authenticated %}
+              <li><a class="dropdown-item" href="{{ url_for('auth.profile') }}">Profile</a></li>
+              <li><a class="dropdown-item" href="{{ url_for('auth.logout') }}">Exit</a></li>
+            {% else %}
+              <li><a class="dropdown-item" href="{{ url_for('auth.login') }}">Login</a></li>
+              <li><a class="dropdown-item" href="{{ url_for('auth.sign_up') }}">Sign up</a></li>
+            {% endif %}
           </ul>
 
         </li>
