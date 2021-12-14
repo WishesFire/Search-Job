@@ -56,7 +56,8 @@ def create_app():
 
     if not database_exists(TestBaseConfig.SQLALCHEMY_DATABASE_URI):
         create_database(TestBaseConfig.SQLALCHEMY_DATABASE_URI)
-        db.create_all()
+        with app.app_context():
+            db.create_all()
 
         from .models.handlers import init_start_categories
         init_start_categories()
