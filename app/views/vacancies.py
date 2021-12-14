@@ -58,15 +58,25 @@ def vacancy_create():
     return render_template("vacancy_create.html", **content)
 
 
-@vacancies_view.route("/<category_slug>", methods=["GET"])
+@vacancies_view.route("/<category_slug>", methods=["GET", "POST"])
 def vacancies_show(category_slug):
     """
-    Show vacancies
+    Show vacancies specific category
     :param category_slug: used for url
     :return: rendered template
     """
+    if request.method == "POST":
+        salary_average = request.form.get("salary-avg")
+        if salary_average:
+            salary_average = float(salary_average)
+            category = Category.query.filter_by(slug=category_slug).first()
+            vacancies = Vacancy.query.filter_by(category=category.id).filter(Vacancy.salary <= salary_average).all()
+
+            content = {"category_vacancies": vacancies, "user": current_user, "filter_flag": True}
+            return render_template("vacancies.html", **content)
+
     category = Category.query.filter_by(slug=category_slug).first()
-    content = {"category_vacancies": category, "user": current_user}
+    content = {"category_vacancies": category, "user": current_user, "filter_flag": False}
     return render_template("vacancies.html", **content)
 
 
