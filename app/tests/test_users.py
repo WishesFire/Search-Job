@@ -3,12 +3,12 @@ from app import create_app
 from werkzeug.security import generate_password_hash
 from app.configs.config import InitTestDataDB
 from app.models.model import User
-from app import db
 
 
 STATUS_CODE = 200
 
 app = create_app()
+app.app_context().push()
 
 
 @pytest.fixture
@@ -18,6 +18,7 @@ def created_test_db():
     """
     app.config["TESTING"] = True
     with app.app_context() as created_db:
+        from app import db
         db.create_all()
         yield created_db
 
@@ -38,6 +39,7 @@ def before_user_access(flag):
     Check user exists
     """
     with app.app_context():
+        from app import db
         db.create_all()
         if flag:
             result = User.query.filter_by(email=InitTestDataDB.USER_EMAIL).first()
@@ -57,6 +59,7 @@ def after_user_delete():
     Delete user after test
     """
     with app.app_context():
+        from app import db
         db.create_all()
         User.query.filter_by(email=InitTestDataDB.USER_EMAIL).delete()
 
@@ -65,19 +68,21 @@ def test_create_user_db(created_test_db):
     """
     Check creating user through the database
     """
-    result = User.query.filter_by(email=InitTestDataDB.USER_EMAIL).first()
-    if result:
+    with app.app_context():
+        from app import db
+        result = User.query.filter_by(email=InitTestDataDB.USER_EMAIL).first()
+        if result:
+            User.query.filter_by(email=InitTestDataDB.USER_EMAIL).delete()
+
+        secure_password = generate_password_hash(InitTestDataDB.USER_PASSWORD, method="sha256")
+        new_user = User(email=InitTestDataDB.USER_EMAIL, password=secure_password)
+        db.session.add(new_user)
+        db.session.commit()
+
+        result = User.query.filter_by(email=InitTestDataDB.USER_EMAIL).first()
+        assert result.email == InitTestDataDB.USER_EMAIL
+
         User.query.filter_by(email=InitTestDataDB.USER_EMAIL).delete()
-
-    secure_password = generate_password_hash(InitTestDataDB.USER_PASSWORD, method="sha256")
-    new_user = User(email=InitTestDataDB.USER_EMAIL, password=secure_password)
-    db.session.add(new_user)
-    db.session.commit()
-
-    result = User.query.filter_by(email=InitTestDataDB.USER_EMAIL).first()
-    assert result.email == InitTestDataDB.USER_EMAIL
-
-    User.query.filter_by(email=InitTestDataDB.USER_EMAIL).delete()
 
 
 def test_get_login_user(client):
