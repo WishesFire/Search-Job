@@ -1,10 +1,9 @@
 import pytest
-from app import create_app
+from app import create_app, db
 from app.models.model import Category
 
 
 app = create_app()
-app.app_context().push()
 
 
 @pytest.fixture
@@ -14,8 +13,6 @@ def created_test_db():
     """
     app.config["TESTING"] = True
     with app.app_context() as created_db:
-        from app import db
-        db.create_all()
         yield created_db
 
 
@@ -26,7 +23,6 @@ def test_add_category(created_test_db):
     category_example = "Testing"
 
     with app.app_context():
-        from app import db
         check_exists = Category.query.filter_by(name=category_example).first()
         if check_exists:
             Category.query.filter_by(name=category_example).delete()
@@ -48,7 +44,6 @@ def test_category_slug(created_test_db):
     category_example = "Testing"
 
     with app.app_context():
-        from app import db
         check_exists = Category.query.filter_by(name=category_example).first()
         if not check_exists:
             new_category = Category(name=category_example)

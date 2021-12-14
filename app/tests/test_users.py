@@ -1,5 +1,5 @@
 import pytest
-from app import create_app
+from app import create_app, db
 from werkzeug.security import generate_password_hash
 from app.configs.config import InitTestDataDB
 from app.models.model import User
@@ -8,7 +8,6 @@ from app.models.model import User
 STATUS_CODE = 200
 
 app = create_app()
-app.app_context().push()
 
 
 @pytest.fixture
@@ -18,8 +17,6 @@ def created_test_db():
     """
     app.config["TESTING"] = True
     with app.app_context() as created_db:
-        from app import db
-        db.create_all()
         yield created_db
 
 
@@ -39,8 +36,6 @@ def before_user_access(flag):
     Check user exists
     """
     with app.app_context():
-        from app import db
-        db.create_all()
         if flag:
             result = User.query.filter_by(email=InitTestDataDB.USER_EMAIL).first()
             if not result:
@@ -59,8 +54,6 @@ def after_user_delete():
     Delete user after test
     """
     with app.app_context():
-        from app import db
-        db.create_all()
         User.query.filter_by(email=InitTestDataDB.USER_EMAIL).delete()
 
 
@@ -69,7 +62,6 @@ def test_create_user_db(created_test_db):
     Check creating user through the database
     """
     with app.app_context():
-        from app import db
         result = User.query.filter_by(email=InitTestDataDB.USER_EMAIL).first()
         if result:
             User.query.filter_by(email=InitTestDataDB.USER_EMAIL).delete()
@@ -139,8 +131,8 @@ def test_post_sign_up_user(client):
     after_user_delete()
 
 
-# def test_create_vacancy():
-#    """
-#    Check create new vacancy using a user profile
-#    """
-#    pass
+def test_create_vacancy():
+    """
+    Check create new vacancy using a user profile
+    """
+    pass
