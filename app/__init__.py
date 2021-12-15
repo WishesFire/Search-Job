@@ -17,21 +17,30 @@ Subpackages:
 - `routes.py`: defines model representing urls
 """
 # pylint: disable=wrong-import-position
-from flask import Flask
+import logging
+from flask import Flask, Blueprint
+from app.configs.config import TestBaseConfig
 from .configs.config import TestBaseConfig
 from sqlalchemy_utils import database_exists, create_database
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
 from flask_wtf.csrf import CSRFProtect
+from flask_restful import Api
+from flask_marshmallow import Marshmallow
 
 
+# Init elements
 db = SQLAlchemy()
 migrate = Migrate()
 login_manager = LoginManager()
 csrf = CSRFProtect()
+ma = Marshmallow()
 
 # Logging
+if TestBaseConfig.LOGGING:
+    logging.basicConfig(filename="record.log", level=logging.INFO, filemode="w",
+                        format=f'%(asctime)s %(levelname)s %(name)s %(threadName)s : %(message)s')
 
 
 def create_app():
@@ -40,6 +49,11 @@ def create_app():
     """
     app = Flask(__name__, static_url_path="", static_folder="static", template_folder="templates")
     app.config.from_object("app.configs.config.TestBaseConfig")
+
+    # API
+    api_bp = Blueprint("api", __name__)
+    api = Api(api_bp)
+    ma.init_app(app)
 
     # Database
     db.init_app(app)
@@ -51,7 +65,7 @@ def create_app():
     login_manager.login_view = 'auth.login'
 
     from app.models.model import Category, Vacancy, User
-    from app.routes import register_handlers
+    from app.routes import register_handlers, register_api_handlers
 
     @login_manager.user_loader
     def load_user(user_id):
@@ -65,6 +79,10 @@ def create_app():
         from .models.handlers import init_start_categories
         init_start_categories(app)
 
+    # Registration handlers
     register_handlers(app)
+    register_api_handlers(api)
+
+    app.register_blueprint(api_bp, url_prefix="/api")
 
     return app

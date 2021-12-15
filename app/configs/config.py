@@ -19,6 +19,7 @@ class TestBaseConfig(object):
 
     TESTING = True
     DEBUG = True
+    LOGGING = False
 
     DB_USERNAME = environ.get("DB_USERNAME")
     DB_PASSWORD = environ.get("DB_PASSWORD")
@@ -37,3 +38,4 @@ class InitTestDataDB:
 class ProductionBaseConfig(TestBaseConfig):
     DEBUG = False
     TESTING = False
+    LOGGING = True

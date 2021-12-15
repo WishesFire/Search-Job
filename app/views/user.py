@@ -8,6 +8,7 @@ Views:
         - Create a new vacancy
 """
 
+import logging
 from flask import Blueprint, request, redirect, url_for, render_template, flash
 from werkzeug.security import generate_password_hash
 from app.service.validartors import RegistrationFormValidator, LoginFormValidator
@@ -27,6 +28,7 @@ def sign_up():
     :return: rendered template
     """
     if request.method == "POST":
+        logging.info("User POST data through registration form")
         email = request.form.get("emailAddress")
         password_1 = request.form.get("password1")
         password_2 = request.form.get("password2")
@@ -34,6 +36,7 @@ def sign_up():
         validator = RegistrationFormValidator(email, password_1, password_2)
         email_status, email_error_msg = validator.check_exists_email()
         password_status, password_error_msg = validator.check_password_similar()
+        logging.info("Validation id DONE")
 
         if email_status and password_status:
             secure_password = generate_password_hash(password_1, method="sha256")
@@ -41,6 +44,7 @@ def sign_up():
                 new_user = User(email=email, password=secure_password)
                 db.session.add(new_user)
                 db.session.commit()
+                logging.info("New user is created")
             except ValueError or exc.DataError:
                 flash("Error", category='error')
             else:
@@ -62,14 +66,17 @@ def login():
     :return: rendered template
     """
     if request.method == "POST":
+        logging.info("User POST data through login form")
         email = request.form.get("emailAddress")
         password = request.form.get("password")
 
         user = User.query.filter_by(email=email).first()
         validator = LoginFormValidator(email, password, user)
         user_status, user_error_msg = validator.check_user_exists()
+        logging.info("Validation is DONE")
 
         if user_status:
+            logging.info("Login user")
             login_user(user, remember=True)
             return redirect(url_for("auth.profile"))
 
@@ -85,6 +92,7 @@ def logout():
     Sing out
     :return: rendered template
     """
+    logging.info("Logout user")
     logout_user()
     return redirect(url_for("base.home"))
 
@@ -96,6 +104,7 @@ def profile():
     Profile of the user with his vacancies and the ability to create new ones
     :return: rendered template
     """
+    logging.info("User open profile")
     user = User.query.filter_by(email=current_user.email).first()
     content = {"user": current_user, "exists_vacancies": user.vacancies}
     return render_template("user/profile.html", **content)
