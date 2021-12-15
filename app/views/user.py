@@ -93,7 +93,7 @@ def logout():
 @login_required
 def profile():
     """
-    User profile
+    Profile of the user with his vacancies and the ability to create new ones
     :return: rendered template
     """
     user = User.query.filter_by(email=current_user.email).first()

@@ -8,7 +8,7 @@ Views:
 
 from flask import Blueprint, render_template, request, redirect, url_for
 from app.service.validartors import VacancyFormValidator
-from flask_login import current_user
+from flask_login import current_user, login_required
 from app.models.model import Category, Vacancy
 from app import db
 
@@ -28,9 +28,10 @@ def categories_show():
 
 
 @vacancies_view.route("/vacancy_create", methods=["GET", "POST"])
+@login_required
 def vacancy_create():
     """
-    Vacancy information form
+    Vacancy information form (Name, salary, about, contacts). Then the vacancy appears in the list
     :return: rendered template
     """
     if request.method == "POST":
@@ -62,6 +63,7 @@ def vacancy_create():
 def vacancies_show(category_slug):
     """
     Show vacancies specific category
+    Filters salary vacancies
     :param category_slug: used for url
     :return: rendered template
     """
@@ -81,9 +83,10 @@ def vacancies_show(category_slug):
 
 
 @vacancies_view.route("/vacancy/<vacancy_slug>", methods=["GET"])
+@login_required
 def vacancy_detail(vacancy_slug):
     """
-    Show detail about specific vacancy
+    Show detail about specific vacancy (title, salary, information about vacancy, contacts)
     :param vacancy_slug:
     :return: rendered template
     """
