@@ -4,61 +4,70 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
 {% endblock %}
 {% block content %}
-    <h1 class="categories-title">Vacancies </h1>
-    <div class="card">
-      <h5 class="card-header">Featured</h5>
-      <div class="card-body">
-        <h5 class="card-title">Special title treatment</h5>
-        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-        <a href="#" class="btn btn-primary">Go somewhere</a>
-      </div>
-    </div>
-    <div class="card">
-      <h5 class="card-header">Featured</h5>
-      <div class="card-body">
-        <h5 class="card-title">Special title treatment</h5>
-        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-        <a href="#" class="btn btn-primary">Go somewhere</a>
-      </div>
-    <div class="card">
-        <article class="card-group-item">
-            <header class="card-header"><h6 class="title">Similar category </h6></header>
+    <h1 class="categories-title">Vacancies</h1>
+    {% if filter_flag %}
+        {% for vac in category_vacancies %}
+            <div class="card" style="width: 800px;">
+              <h5 class="card-header">{{ vac.name }}</h5>
+              <div class="card-body">
+                <h5 class="card-title">Salary: {{ vac.salary }}</h5>
+                <p class="card-text" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ vac.info }}</p>
+                <a href="{{ url_for('vacancies.vacancy_detail', vacancy_slug=vac.slug) }}" class="btn btn-primary">Go</a>
+              </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        {% for vac in category_vacancies.vacancies %}
+            <div class="card" style="width: 800px;">
+              <h5 class="card-header">{{ vac.name }}</h5>
+              <div class="card-body">
+                <h5 class="card-title">Salary: {{ vac.salary }}</h5>
+                <p class="card-text" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ vac.info }}</p>
+                <a href="{{ url_for('vacancies.vacancy_detail', vacancy_slug=vac.slug) }}" class="btn btn-primary">Go</a>
+              </div>
+            </div>
+        {% endfor %}
+    {% endif %}
+    <div>
+        <article class="card-group-item" style="position: absolute; left: 1200px; bottom: 650px;">
+            <header class="card-header"><h6 class="title">Average salary</h6></header>
             <div class="filter-content">
                 <div class="card-body">
-                    <label class="btn btn-danger">
-                      <input class="" type="checkbox" name="myradio" value="">
-                      <span class="form-check-label">Red</span>
-                    </label>
-                    <label class="btn btn-success">
-                      <input class="" type="checkbox" name="myradio" value="">
-                      <span class="form-check-label">Green</span>
-                    </label>
-                    <label class="btn btn-primary">
-                      <input class="" type="checkbox" name="myradio" value="">
-                      <span class="form-check-label">Blue</span>
-                    </label>
+                    <form method="post">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+
+                        <label class="btn">
+                          <input type="checkbox" name="salary-avg" value="100" onclick="onlyOne(this)">
+                          <span class="form-check-label">100$</span>
+                        </label>
+                        <label class="btn">
+                          <input type="checkbox" name="salary-avg" value="500" onclick="onlyOne(this)">
+                          <span class="form-check-label">500$</span>
+                        </label>
+                        <label class="btn">
+                          <input type="checkbox" name="salary-avg" value="1000" onclick="onlyOne(this)">
+                          <span class="form-check-label">1000$</span>
+                        </label>
+                        <label class="btn">
+                          <input type="checkbox" name="salary-avg" value="2000" onclick="onlyOne(this)">
+                          <span class="form-check-label">2000$</span>
+                        </label>
+                        <label class="btn">
+                          <input type="checkbox" name="salary-avg" value="5000" onclick="onlyOne(this)">
+                          <span class="form-check-label">5000$</span>
+                        </label>
+                        <label class="btn">
+                          <input type="checkbox" name="salary-avg" value="6500" onclick="onlyOne(this)">
+                          <span class="form-check-label">6500$</span>
+                        </label>
+
+                        <button style="position: absolute; right: 480px; top: 120px;" type="submit" class="btn btn-primary">Filter</button>
+                    </form>
                 </div>
             </div>
         </article>
-        <article class="card-group-item">
-            <header class="card-header"><h6 class="title">Color check</h6></header>
-            <div class="filter-content">
-                <div class="card-body">
-                    <label class="btn btn-danger">
-                      <input class="" type="checkbox" name="myradio" value="">
-                      <span class="form-check-label">Red</span>
-                    </label>
-                    <label class="btn btn-success">
-                      <input class="" type="checkbox" name="myradio" value="">
-                      <span class="form-check-label">Green</span>
-                    </label>
-                    <label class="btn btn-primary">
-                      <input class="" type="checkbox" name="myradio" value="">
-                      <span class="form-check-label">Blue</span>
-                    </label>
-                </div>
-            </div>
-        </article>
     </div>
-    </div>
+{% endblock %}
+{% block js %}
+    <script src="{{ url_for('static', filename='js/checkbox-limit.js') }}"></script>
 {% endblock %}

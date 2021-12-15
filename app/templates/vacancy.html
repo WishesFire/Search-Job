@@ -4,5 +4,12 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
 {% endblock %}
 {% block content %}
-    
+    <main role="main" class="container">
+        <h1 class="mt-5">{{ vacancy.name }}</h1>
+        <p style="color: #0b5ed7" class="lead">Salary: {{ vacancy.salary }}</p>
+        <p style="margin-top: 25px;">Main information:</p>
+        <p>{{ vacancy.info }}</p>
+        <p style="margin-top: 55px;">Contacts:</p>
+        <p>{{ vacancy.contacts }}</p>
+    </main>
 {% endblock %}

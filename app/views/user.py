@@ -12,7 +12,7 @@ from flask import Blueprint, request, redirect, url_for, render_template, flash
 from werkzeug.security import generate_password_hash
 from app.service.validartors import RegistrationFormValidator, LoginFormValidator
 from app.models.model import User
-from flask_login import login_user, logout_user, login_required
+from flask_login import login_user, logout_user, login_required, current_user
 from sqlalchemy import exc
 from app import db
 
@@ -93,7 +93,9 @@ def logout():
 @login_required
 def profile():
     """
-    User profile
+    Profile of the user with his vacancies and the ability to create new ones
     :return: rendered template
     """
-    return render_template("user/profile.html")
+    user = User.query.filter_by(email=current_user.email).first()
+    content = {"user": current_user, "exists_vacancies": user.vacancies}
+    return render_template("user/profile.html", **content)

@@ -60,6 +60,14 @@ class Vacancy(db.Model):
     user = db.Column(db.ForeignKey('user.id'), nullable=False)
     category = db.Column(db.Integer, db.ForeignKey("category.id"), nullable=False)
 
+    def __init__(self, *args, **kwargs):
+        """
+        If slug not in input data then create slug automatically
+        """
+        if "slug" not in kwargs:
+            kwargs["slug"] = slugify(kwargs.get('name', ''))
+        super().__init__(*args, **kwargs)
+
     def __repr__(self):
         return "Vacancy"
 

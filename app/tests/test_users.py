@@ -11,22 +11,13 @@ app = create_app()
 
 
 @pytest.fixture
-def created_test_db():
-    """
-    Create app context for db operations
-    """
-    app.config["TESTING"] = True
-    with app.app_context() as created_db:
-        yield created_db
-
-
-@pytest.fixture
 def client():
     """
     Create new application as client
     :return: copy app client
     """
     app.config["TESTING"] = True
+    app.config["WTF_CSRF_ENABLED"] = False
     with app.test_client() as client:
         yield client
 
@@ -57,7 +48,7 @@ def after_user_delete():
         User.query.filter_by(email=InitTestDataDB.USER_EMAIL).delete()
 
 
-def test_create_user_db(created_test_db):
+def test_create_user_db():
     """
     Check creating user through the database
     """
@@ -96,8 +87,8 @@ def test_post_login_user(client):
     :return:
     """
     before_user_access(flag=True)
-    client.post("/login", data=dict(emailAddress=InitTestDataDB.USER_EMAIL, password=InitTestDataDB.USER_PASSWORD))
-    res = client.get("/profile")
+    res = client.post("/login", data={"emailAddress": InitTestDataDB.USER_EMAIL,
+                                      "password": InitTestDataDB.USER_PASSWORD}, follow_redirects=True)
     assert res.status_code == STATUS_CODE
 
     after_user_delete()
@@ -131,8 +122,11 @@ def test_post_sign_up_user(client):
     after_user_delete()
 
 
-def test_create_vacancy():
+def test_profile(client):
     """
-    Check create new vacancy using a user profile
+    Check GET profile
+    :param client:
+    :return:
     """
-    pass
+    res = client.get("/profile", follow_redirects=True)
+    assert res.status_code == STATUS_CODE

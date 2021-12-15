@@ -71,3 +71,34 @@ class LoginFormValidator:
             return False, msg
 
         return True, None
+
+
+class VacancyFormValidator:
+    """
+    Validator of vacancy input data
+    """
+    def __init__(self, name, salary, about, info):
+        """
+        :param name: vacancy name
+        :param salary: vacancy salary
+        :param about: information about job
+        :param info: contact information
+        """
+        self.name = name
+        self.salary = salary
+        self.about = about
+        self.info = info
+
+    def check_name(self):
+        """
+        :return: Title vacancy name
+        """
+        return self.name.title()
+
+    def check_salary(self):
+        """
+        Check on number salary
+        :return: If not return False
+        """
+        if not isinstance(self.salary, float) or not isinstance(self.salary, int):
+            return float(self.salary)
