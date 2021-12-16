@@ -1,3 +1,8 @@
+"""
+This module works for restful api
+TestConnection - (GET)
+"""
+
 from flask_restful import Resource
 
 

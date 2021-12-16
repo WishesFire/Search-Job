@@ -1,5 +1,8 @@
 """
 Configs for server
+    - `TestBaseConfig`: server settings in test mode
+    - `InitTestDataDB`: elements for testing
+    - `ProductionBaseConfig`: server settings in production mode
 """
 
 from dotenv import load_dotenv
@@ -14,6 +17,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 class TestBaseConfig(object):
     SECRET_KEY = environ.get("SECRET_KEY")
+    JWT_SECRET_KEY = environ.get("JWT_SECRET_KEY")
     HOST = environ.get("HOST")
     PORT = environ.get("PORT")
 

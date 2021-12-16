@@ -28,6 +28,7 @@ from flask_login import LoginManager
 from flask_wtf.csrf import CSRFProtect
 from flask_restful import Api
 from flask_marshmallow import Marshmallow
+from flask_jwt_extended import JWTManager
 
 
 # Init elements
@@ -36,6 +37,7 @@ migrate = Migrate()
 login_manager = LoginManager()
 csrf = CSRFProtect()
 ma = Marshmallow()
+jwt = JWTManager()
 
 # Logging
 if TestBaseConfig.LOGGING:
@@ -54,6 +56,7 @@ def create_app():
     api_bp = Blueprint("api", __name__)
     api = Api(api_bp)
     ma.init_app(app)
+    jwt.init_app(app)
 
     # Database
     db.init_app(app)
@@ -83,6 +86,7 @@ def create_app():
     register_handlers(app)
     register_api_handlers(api)
 
+    csrf.exempt(api_bp)
     app.register_blueprint(api_bp, url_prefix="/api")
 
     return app

@@ -10,12 +10,9 @@ Views:
 
 import logging
 from flask import Blueprint, request, redirect, url_for, render_template, flash
-from werkzeug.security import generate_password_hash
-from app.service.validartors import RegistrationFormValidator, LoginFormValidator
+from app.service.auth import util_signup, util_login
 from app.models.model import User
 from flask_login import login_user, logout_user, login_required, current_user
-from sqlalchemy import exc
-from app import db
 
 
 auth_view = Blueprint("auth", __name__)
@@ -32,29 +29,13 @@ def sign_up():
         email = request.form.get("emailAddress")
         password_1 = request.form.get("password1")
         password_2 = request.form.get("password2")
-
-        validator = RegistrationFormValidator(email, password_1, password_2)
-        email_status, email_error_msg = validator.check_exists_email()
-        password_status, password_error_msg = validator.check_password_similar()
-        logging.info("Validation id DONE")
-
-        if email_status and password_status:
-            secure_password = generate_password_hash(password_1, method="sha256")
-            try:
-                new_user = User(email=email, password=secure_password)
-                db.session.add(new_user)
-                db.session.commit()
-                logging.info("New user is created")
-            except ValueError or exc.DataError:
-                flash("Error", category='error')
-            else:
-                login_user(new_user)
+        user = util_signup(email, password_1, password_2)
+        if user:
+            login_user(user)
 
             return redirect(url_for("base.home"))
-        elif not email_status:
-            flash(f"Problem - {email_error_msg}", category='error')
-        elif not password_status:
-            flash(f"Problem - {password_error_msg}", category='error')
+        else:
+            flash(f"Problem with registration", category='error')
 
     return render_template("user/registration.html")
 
@@ -70,10 +51,7 @@ def login():
         email = request.form.get("emailAddress")
         password = request.form.get("password")
 
-        user = User.query.filter_by(email=email).first()
-        validator = LoginFormValidator(email, password, user)
-        user_status, user_error_msg = validator.check_user_exists()
-        logging.info("Validation is DONE")
+        user_status, user_error_msg, user = util_login(email, password)
 
         if user_status:
             logging.info("Login user")
