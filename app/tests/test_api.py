@@ -31,24 +31,45 @@ def client():
 
 
 def test_connection(client):
+    """
+    test `/api/ping` - Check connection
+    :param client: cope app client
+    :return: Passed status if code is similar
+    """
     response = client.get("/api/ping")
     assert response.status_code == 200
     assert response.json["Ping"] == "Pong"
 
 
 def test_get_categories(client):
+    """
+    test `/api/categories` - Get all categories
+    :param client: cope app client
+    :return: Passed status if code is similar
+    """
     response = client.get("/api/categories")
     assert response.status_code == 200
     assert response.json
 
 
 def test_get_vacancies(client):
+    """
+    test `/api/vacancies/category_slug` - Get vacancies at slug
+    :param client: cope app client
+    :return: Passed status if code is similar
+    """
     response = client.get(f"/api/vacancies/{category_slug}")
     assert response.status_code == 200
     assert response.json
 
 
 def test_signup_login(client):
+    """
+    test `/api/auth/signup` - Create new user
+    test `/api/auth/login` - Login in user and get token
+    :param client: cope app client
+    :return: Passed status if code is similar
+    """
     global LOGIN_TOKEN
 
     with app.app_context():
@@ -70,6 +91,11 @@ def test_signup_login(client):
 
 
 def test_post_vacancy(client):
+    """
+    test `api/vacancies/category_slug` (POST) - Create new test vacancy
+    :param client: cope app client
+    :return: Passed status if code is similar
+    """
     response = client.post(f"/api/vacancies/{category_slug}",
                            headers={"Content-Type": "application/json", "Authorization": f"Bearer {LOGIN_TOKEN}"},
                            data=json.dumps({"name": name, "salary": salary, "about": about, "contacts": contacts}))
@@ -78,9 +104,13 @@ def test_post_vacancy(client):
 
 
 def test_delete_vacancy(client):
+    """
+    test `api/vacancies/category_slug` (DELETE) - Delete test vacancy
+    :param client: cope app client
+    :return: Passed status if code is similar
+    """
     response = client.delete(f"/api/vacancies/{category_slug}",
                              headers={"Content-Type": "application/json", "Authorization": f"Bearer {LOGIN_TOKEN}"},
                              data=json.dumps({"name": name}))
     assert response.status_code == 200
     assert response.json["msg"] == f"Vacancy - {name} successfully deleted"
-
