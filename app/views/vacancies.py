@@ -6,6 +6,7 @@ Views:
     - `vacancy_detail (/vacancy/<vacancy_slug>)`: Show detail about vacancy
 """
 
+import logging
 from flask import Blueprint, render_template, request, redirect, url_for
 from app.service.validartors import VacancyFormValidator
 from flask_login import current_user, login_required
@@ -22,6 +23,7 @@ def categories_show():
     Show categories
     :return: rendered template
     """
+    logging.info("Show all categories")
     categories = Category.query.all()
     content = {"categories": categories, "user": current_user}
     return render_template("categories.html", **content)
@@ -35,15 +37,18 @@ def vacancy_create():
     :return: rendered template
     """
     if request.method == "POST":
+        logging.info("User POST vacancy_create")
         vacancy_name = request.form.get("name")
         vacancy_salary = request.form.get("salary")
         vacancy_about = request.form.get("about")
         vacancy_contacts = request.form.get("contacts")
         vacancy_category = request.form.get("category")
+        logging.info("Get vacancy data from vacancy creating form")
 
         validator = VacancyFormValidator(vacancy_name, vacancy_salary, vacancy_about, vacancy_contacts)
         vacancy_name = validator.check_name()
         vacancy_salary = validator.check_salary()
+        logging.info("Validation is DONE")
 
         category = Category.query.filter_by(name=vacancy_category).first()
 
@@ -51,6 +56,7 @@ def vacancy_create():
                               contacts=vacancy_contacts, user=current_user.id, category=category.id)
         db.session.add(new_vacancy)
         db.session.commit()
+        logging.info("New vacancy created")
 
         return redirect(url_for("auth.profile"))
 
@@ -70,6 +76,7 @@ def vacancies_show(category_slug):
     if request.method == "POST":
         salary_average = request.form.get("salary-avg")
         if salary_average:
+            logging.info(f"Salary filter get - {salary_average}")
             salary_average = float(salary_average)
             category = Category.query.filter_by(slug=category_slug).first()
             vacancies = Vacancy.query.filter_by(category=category.id).filter(Vacancy.salary <= salary_average).all()
@@ -91,5 +98,6 @@ def vacancy_detail(vacancy_slug):
     :return: rendered template
     """
     current_vacancy = Vacancy.query.filter_by(slug=vacancy_slug).first()
+    logging.info(f"Show vacancy detail - {current_vacancy.name}")
     content = {"vacancy": current_vacancy, "user": current_user}
     return render_template("vacancy.html", **content)

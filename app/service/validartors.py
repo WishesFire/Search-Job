@@ -1,11 +1,12 @@
 """
 Service for validates incoming data
 Validators:
-    - `RegistrationFormValidator`: used to check_exists_email and check_password_similar
+    - `RegistrationFormValidator`: used to check_exists_email, check_password_similar
     - `LoginFormValidator`: used to check_user_exists
+    - `VacancyFormValidator`: used to check_name, check_salary, check_category
 """
 
-from app.models.model import User
+from app.models.model import User, Category
 from werkzeug.security import check_password_hash
 
 
@@ -77,7 +78,7 @@ class VacancyFormValidator:
     """
     Validator of vacancy input data
     """
-    def __init__(self, name, salary, about, info):
+    def __init__(self, name, salary, about, info, category=None):
         """
         :param name: vacancy name
         :param salary: vacancy salary
@@ -88,6 +89,7 @@ class VacancyFormValidator:
         self.salary = salary
         self.about = about
         self.info = info
+        self.category = category
 
     def check_name(self):
         """
@@ -97,8 +99,19 @@ class VacancyFormValidator:
 
     def check_salary(self):
         """
-        Check on number salary
+        Checks on number salary
         :return: If not return False
         """
         if not isinstance(self.salary, float) or not isinstance(self.salary, int):
             return float(self.salary)
+
+    def check_category(self):
+        """
+        Checks if there is a category in the database
+        :return: If category name find in database then return schema
+        """
+        if self.category:
+            result = Category.query.filter_by(slug=str(self.category).title()).first()
+            if result:
+                return result
+            return False
