@@ -60,7 +60,6 @@ def test_get_vacancies(client):
     """
     response = client.get(f"/api/vacancies/{category_slug}")
     assert response.status_code == 200
-    assert response.json
 
 
 def test_signup_login(client):
