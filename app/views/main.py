@@ -16,5 +16,5 @@ def home():
     Show main home page
     :return: rendered template
     """
-    logging.info("Enter to home page")
+    logging.info(f"Enter to home page - {current_user.id}")
     return render_template("main_page.html", user=current_user)
