@@ -26,6 +26,7 @@ def categories_show():
     logging.info("Show all categories")
     categories = Category.query.all()
     content = {"categories": categories, "user": current_user}
+    logging.info(f"All categories - {categories}")
     return render_template("categories.html", **content)
 
 
@@ -51,7 +52,6 @@ def vacancy_create():
         logging.info("Validation is DONE")
 
         category = Category.query.filter_by(name=vacancy_category).first()
-
         new_vacancy = Vacancy(name=vacancy_name, salary=vacancy_salary, info=vacancy_about,
                               contacts=vacancy_contacts, user=current_user.id, category=category.id)
         db.session.add(new_vacancy)
@@ -79,8 +79,9 @@ def vacancies_show(category_slug):
             logging.info(f"Salary filter get - {salary_average}")
             salary_average = float(salary_average)
             category = Category.query.filter_by(slug=category_slug).first()
+            logging.info(f"Current category - {category.name}")
             vacancies = Vacancy.query.filter_by(category=category.id).filter(Vacancy.salary <= salary_average).all()
-
+            logging.info(f"All filtered vacancies - {vacancies}")
             content = {"category_vacancies": vacancies, "user": current_user, "filter_flag": True}
             return render_template("vacancies.html", **content)
 

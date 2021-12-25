@@ -20,11 +20,11 @@
             {% endblock %}
         </div>
     </div>
-    <!-- Module area js -->
-    {% block js %}
-    {% endblock %}
     <!-- Bootstrap core JavaScript -->
     <script src="{{ url_for('static', filename='bootstrap/js/bootstrap.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/jquery-3.6.0.min.js') }}"></script>
+    <!-- Module area js -->
+    {% block js %}
+    {% endblock %}
 </body>
 </html>

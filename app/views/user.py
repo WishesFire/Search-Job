@@ -8,10 +8,11 @@ Views:
         - Create a new vacancy
 """
 
+import json
 import logging
 from flask import Blueprint, request, redirect, url_for, render_template, flash
 from app.service.auth import util_signup, util_login
-from app.models.model import User
+from app.models.model import User, Vacancy
 from flask_login import login_user, logout_user, login_required, current_user
 
 
@@ -63,7 +64,7 @@ def login():
     return render_template("user/login.html")
 
 
-@auth_view.route("/logout")
+@auth_view.route("/logout", methods=["GET"])
 @login_required
 def logout():
     """
@@ -75,13 +76,19 @@ def logout():
     return redirect(url_for("base.home"))
 
 
-@auth_view.route("/profile")
+@auth_view.route("/profile", methods=["GET", "DELETE"])
 @login_required
 def profile():
     """
     Profile of the user with his vacancies and the ability to create new ones
     :return: rendered template
     """
+    if request.method == "DELETE":
+        data = json.loads(request.data)
+        logging.info(f"Deleted data - {data['name']}")
+        if data["name"]:
+            Vacancy.query.filter_by(name=data["name"], user=current_user.id).delete()
+
     logging.info("User open profile")
     user = User.query.filter_by(email=current_user.email).first()
     content = {"user": current_user, "exists_vacancies": user.vacancies}

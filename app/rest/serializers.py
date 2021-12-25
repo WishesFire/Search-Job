@@ -25,6 +25,7 @@ class VacancySchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = Vacancy
         fields = ("name", "salary", "info", "contacts")
+        ordered = True
 
 
 categories_schema = CategorySchema(many=True)
