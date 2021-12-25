@@ -1,0 +1,26 @@
+<div class="p-5 text-center">
+        <div class="mask" style="background-color: #f8f9fa;">
+          <div class="d-flex justify-content-center align-items-center h-100">
+            <div class="text-white">
+                <h1 class="mb-3" style="color: grey; font-size: 65px;">Profile</h1>
+                <button style="background-color: #4CAF50;
+                            border: none; color: white; font-size: 36px; margin-bottom: 20px; position: absolute;
+                            left: 400px; top: 350px;
+                            padding: 25px 42px; text-align: center; text-decoration: none; border-radius: 8px;">
+                    <a style="text-decoration: none;" href="{{ url_for('vacancies.vacancy_create') }}">Create</a></button>
+                    <div class="card" style="margin-top: 15px">
+                        <div class="card-body">
+                            <div class="card-body" style="margin: 20px">
+                                <a class="vac-title" style="text-decoration: none; font-size: 20px;"
+                                   href="{{ url_for('vacancies.vacancy_detail', vacancy_slug=vac.slug) }}"></a>
+                                <button class="deleteMe" style="background: red; margin-left: 30px;
+                                color: #fff; border-radius: 3px;
+                                font-size: 18px; line-height: 1;">Delete</button>
+                            </div>
+                        </div>
+                    </div>
+
+            </div>
+          </div>
+        </div>
+</div>

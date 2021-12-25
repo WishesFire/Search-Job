@@ -79,16 +79,19 @@ class VacancyAPI(Resource):
     @jwt_required()
     def put(cls, category_slug):
         """
+        Update the opening vacancy
+        :param category_slug: category slug
         :return: json
         """
         try:
             user_id = get_jwt_identity()
-            args = vacancy_delete_args.parse_args()
+            args = vacancy_put_args.parse_args()
+            current_name = args.get("current_name")
             name = args.get("name")
             salary = args.get("salary")
             about = args.get("about")
             contacts = args.get("contacts")
-            vacancy = Vacancy.query.filter_by(user=user_id).first()
+            vacancy = Vacancy.query.filter_by(name=current_name, user=user_id).first()
             if name:
                 vacancy.name = name
             elif salary:

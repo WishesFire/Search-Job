@@ -1,0 +1,7 @@
+[TYPECHECK]
+
+ignored-classes=scoped_session
+
+[DESIGN]
+
+max-args=10

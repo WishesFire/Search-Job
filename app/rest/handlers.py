@@ -34,6 +34,7 @@ vacancy_delete_args.add_argument("name", type=str, help="The main name of the va
 
 # VacancyAPI (PUT)
 vacancy_put_args = reqparse.RequestParser()
+vacancy_put_args.add_argument("current_name", type=str, help="Current name of the vanancy", required=True)
 vacancy_put_args.add_argument("name", type=str, help="The main name of the vacancy", required=False)
 vacancy_put_args.add_argument("salary", type=float, help="Salary vacancies", required=False)
 vacancy_put_args.add_argument("about", type=str, help="Vacancy information", required=False)

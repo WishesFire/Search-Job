@@ -1,0 +1,29 @@
+<form method="post">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+
+        <div class="mb-3">
+            <label for="titleFormControlInput" class="form-label">Vacancy name</label>
+            <input type="text" name="name" class="form-control" id="titleFormControlInput">
+        </div>
+
+        <div class="mb-3">
+            <label for="salaryFormControlTextarea" class="form-label">Salary $</label>
+            <input type="number" name="salary" class="form-control" id="salaryFormControlTextarea">
+        </div>
+
+        <div class="mb-3">
+            <label for="aboutFormControlTextarea" class="form-label">About vacancy</label>
+            <textarea class="form-control" name="about" id="aboutFormControlTextarea" rows="4"></textarea>
+        </div>
+
+        <div class="mb-3">
+            <label for="contactFormControlTextarea" class="form-label">Contact information</label>
+            <textarea class="form-control" name="contacts" id="contactFormControlTextarea" rows="4"></textarea>
+        </div>
+
+        <select name="category" class="form-select" aria-label="Default select example">
+            <option value="{{ category.name }}"></option>
+        </select>
+
+        <button style="margin-top: 30px;" type="submit" class="btn btn-primary">Submit</button>
+</form>
