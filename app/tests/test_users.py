@@ -125,8 +125,18 @@ def test_post_sign_up_user(client):
 def test_profile(client):
     """
     Check GET profile
-    :param client:
-    :return:
+    :param client: copy app client
+    :return: Passed status if code is similar
     """
     res = client.get("/profile", follow_redirects=True)
+    assert res.status_code == STATUS_CODE
+
+
+def test_profile_delete(client):
+    """
+    Check DELETE profile
+    :param client: copy app client
+    :return: Passed status if code is similar
+    """
+    res = client.delete("/profile", follow_redirects=True, data={"name": "1111"})
     assert res.status_code == STATUS_CODE

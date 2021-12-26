@@ -102,6 +102,14 @@ def test_post_vacancy(client):
     assert response.json["msg"] == "New vacancy successfully created"
 
 
+def test_put_vacancy(client):
+    response = client.put(f"/api/vacancies/{category_slug}",
+                          headers={"Content-Type": "application/json", "Authorization": f"Bearer {LOGIN_TOKEN}"},
+                          data=json.dumps({"current_name": name, "salary": 99999}))
+    assert response.status_code == 200
+    assert response.json["msg"] == "Vacancy successfully updated"
+
+
 def test_delete_vacancy(client):
     """
     test `api/vacancies/category_slug` (DELETE) - Delete test vacancy
