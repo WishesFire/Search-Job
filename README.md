@@ -106,6 +106,11 @@ Vacancies:
 ```
 http://127.0.0.1:5000/api/vacancies/<category_slug> (GET, POST, PUT, DELETE)
 
+GET: 
+{
+    "filterSalary": "" (Not required)
+}
+
 POST:
 {
     "name": "",

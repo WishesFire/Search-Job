@@ -9,7 +9,7 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from app.models.model import Vacancy, Category
 from sqlalchemy import exc
 from app.rest.serializers import vacancies_schema
-from .handlers import vacancy_post_args, vacancy_delete_args, vacancy_put_args
+from .handlers import vacancy_post_args, vacancy_delete_args, vacancy_put_args, vacancy_get_args
 from app.service.validartors import VacancyFormValidator
 
 
@@ -18,16 +18,24 @@ class VacancyAPI(Resource):
     def get(cls, category_slug):
         """
         Get all vacancies by category
+        You can also get vacancies on the salary filter (parameter: filterSalary)
         :param category_slug: category slug
         :return: json
         """
+        args = vacancy_get_args.parse_args()
         try:
             category = Category.query.filter_by(slug=category_slug).first()
-            if category:
+            if args.get("filterSalary"):
+                filter_salary = float(args.get("filterSalary"))
+                all_vacancies = Vacancy.query.filter_by(category=category.id).filter(
+                            Vacancy.salary <= filter_salary).all()
+                if all_vacancies is []:
+                    return {"msg": "No vacancies were found for this filter"}, 200
+            else:
                 all_vacancies = Vacancy.query.filter_by(category=category.id).all()
-                vacancies_serialize = vacancies_schema.dump(all_vacancies)
-                return vacancies_serialize, 200
-            return {"msg": f"Category with slug: {category} don't exist"}, 401
+
+            vacancies_serialize = vacancies_schema.dump(all_vacancies)
+            return vacancies_serialize, 200
 
         except exc.ArgumentError:
             return {"msg": "Invalid or conflicting function argument is supplied"}
@@ -41,6 +49,7 @@ class VacancyAPI(Resource):
     def post(cls, category_slug):
         """
         Create a new vacancy
+        Parameters: name, salary, about, contacts
         :param category_slug: category slug
         :return: json
         """
@@ -77,10 +86,10 @@ class VacancyAPI(Resource):
 
     @classmethod
     @jwt_required()
-    def put(cls, category_slug):
+    def put(cls):
         """
         Update the opening vacancy
-        :param category_slug: category slug
+        Parameters: current_name, name, salary, about, contacts
         :return: json
         """
         try:
@@ -113,10 +122,10 @@ class VacancyAPI(Resource):
 
     @classmethod
     @jwt_required()
-    def delete(cls, category_slug):
+    def delete(cls):
         """
         Delete an existing vacancy
-        :param category_slug: category slug
+        Parameters: name
         :return: json
         """
         try:
