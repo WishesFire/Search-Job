@@ -22,7 +22,7 @@ def init_start_categories(app):
 
 def init_test_user(app):
     """
-    Populate database with user
+    Populate database with test user
     """
     with app.app_context():
         secure_password = generate_password_hash(InitTestDataDB.USER_PASSWORD)

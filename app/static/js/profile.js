@@ -9,7 +9,7 @@ $(document).ready(function(){
            data: JSON.stringify({"name": el_name}),
            error: function (exception) {
                console.log(exception);
-               alert(exception);
+               alert("Something wrong");
            }
        })
     });

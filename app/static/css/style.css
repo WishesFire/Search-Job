@@ -6,3 +6,23 @@
 .background-style {
     background-image: url("../img/user-logo.png");
 }
+
+.content_toggle {
+	display: inline-block;
+	padding: 15px 20px;
+	background: blue;
+	font-size: 16px;
+	text-decoration: none;
+	color: #fff;
+	margin-bottom: 20px;
+	border-radius: 5px;
+	border-bottom: dodgerblue;
+}
+.content_toggle:hover {
+	color: #fff;
+	background: deepskyblue;
+	border-bottom: 3px solid darkblue;
+}
+.content_toggle:active {
+	background: blue;
+}

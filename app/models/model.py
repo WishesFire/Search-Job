@@ -46,6 +46,7 @@ class Vacancy(db.Model):
     salary - the amount of money that will be paid
     info - information about vacancy
     contacts - employer contacts
+    notification - notify the vacancy owner
     user - vacancy owner
     category - the category to which the vacancy belongs
     """
@@ -57,6 +58,7 @@ class Vacancy(db.Model):
     salary = db.Column(db.FLOAT, nullable=False)
     info = db.Column(db.String(400), nullable=False)
     contacts = db.Column(db.String(100), nullable=False)
+    notification = db.Column(db.Boolean, unique=False, default=False)
     user = db.Column(db.ForeignKey('user.id'), nullable=False)
     category = db.Column(db.Integer, db.ForeignKey("category.id"), nullable=False)
 

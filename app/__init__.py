@@ -29,6 +29,7 @@ from flask_wtf.csrf import CSRFProtect
 from flask_restful import Api
 from flask_marshmallow import Marshmallow
 from flask_jwt_extended import JWTManager
+from flask_mail import Mail
 
 
 # Init elements
@@ -38,6 +39,7 @@ login_manager = LoginManager()
 csrf = CSRFProtect()
 ma = Marshmallow()
 jwt = JWTManager()
+mail = Mail()
 
 # Logging
 if TestBaseConfig.LOGGING:
@@ -66,6 +68,9 @@ def create_app():
     login_manager.init_app(app)
     csrf.init_app(app)
     login_manager.login_view = 'auth.login'
+
+    # Mail
+    mail.init_app(app)
 
     from app.models.model import Category, Vacancy, User
     from app.routes import register_handlers, register_api_handlers

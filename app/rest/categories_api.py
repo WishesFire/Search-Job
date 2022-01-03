@@ -1,6 +1,6 @@
 """
 This module works for restful api
-CategoryAPI - (GET)
+`CategoryAPI (GET)`: show all categories
 """
 
 from flask_restful import Resource

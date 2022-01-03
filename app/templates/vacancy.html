@@ -2,14 +2,20 @@
 {% block title %}Vacancy {% endblock %}
 {% block css %}
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 {% endblock %}
 {% block content %}
     <main role="main" class="container">
+        <p class="slug-vacancy" style="display: none;">{{ vacancy.slug }}</p>
         <h1 class="mt-5">{{ vacancy.name }}</h1>
         <p style="color: #0b5ed7" class="lead">Salary: {{ vacancy.salary }}</p>
         <p style="margin-top: 25px;">Main information:</p>
         <p>{{ vacancy.info }}</p>
         <p style="margin-top: 55px;">Contacts:</p>
-        <p>{{ vacancy.contacts }}</p>
+        <a class="content_toggle" href="">Show contacts</a>
+        <p class="content_block" style="display: none;">{{ vacancy.contacts }}</p>
     </main>
+{% endblock %}
+{% block js %}
+    <script src="{{ url_for('static', filename='js/notification.js') }}"></script>
 {% endblock %}

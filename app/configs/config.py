@@ -31,6 +31,13 @@ class TestBaseConfig(object):
     SQLALCHEMY_DATABASE_URI = f"mysql+pymysql://{DB_USERNAME}:{DB_PASSWORD}@localhost/{DB_NAME}"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
+    MAIL_SERVER = "smtp.gmail.com"
+    MAIL_PORT = 465
+    MAIL_USERNAME = environ.get("MAIL_USERNAME")
+    MAIL_PASSWORD = environ.get("MAIL_PASSWORD")
+    MAIL_USE_TLS = False
+    MAIL_USE_SSL = True
+
 
 class InitTestDataDB:
     CATEGORIES = {"Designer", "Accountant", "Lawyer", "Programmer",

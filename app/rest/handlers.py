@@ -1,10 +1,13 @@
 """
 Request parser (analyzes the query for the required fields)
 
-- login_user_post_args (post) - [email, password]
-- registration_user_post_args (post) - [email, password1, password2]
-- create_vacancy_post_args (post) - [name, salary, about, contacts]
-- delete_vacancy_post_args (delete) - [name]
+- login_user_post_args (POST) - [email, password]
+- registration_user_post_args (POST) - [email, password1, password2]
+- vacancy_get_args (GET) - [filterSalary]
+- vacancy_post_args (POST) - [name, salary, about, contacts]
+- vacancy_delete_args (DELETE) - [name]
+- vacancy_put_args (PUT) - [current_name, name, salary, about, contacts]
+- delete_vacancy_post_args (DELETE) - [name]
 """
 
 from flask_restful import reqparse

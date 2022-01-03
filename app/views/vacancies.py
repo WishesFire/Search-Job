@@ -7,11 +7,14 @@ Views:
 """
 
 import logging
+import json
 from flask import Blueprint, render_template, request, redirect, url_for
+from flask_mail import Message
+from app.configs.config import TestBaseConfig
 from app.service.validartors import VacancyFormValidator
 from flask_login import current_user, login_required
-from app.models.model import Category, Vacancy
-from app import db
+from app.models.model import Category, Vacancy, User
+from app import db, mail
 
 
 vacancies_view = Blueprint('vacancies', __name__)
@@ -34,7 +37,7 @@ def categories_show():
 @login_required
 def vacancy_create():
     """
-    Vacancy information form (Name, salary, about, contacts). Then the vacancy appears in the list
+    Vacancy information form (Name, salary, about, notification, contacts). Then the vacancy appears in the list
     :return: rendered template
     """
     if request.method == "POST":
@@ -44,6 +47,10 @@ def vacancy_create():
         vacancy_about = request.form.get("about")
         vacancy_contacts = request.form.get("contacts")
         vacancy_category = request.form.get("category")
+        if request.form.get("notify"):
+            vacancy_notification = True
+        else:
+            vacancy_notification = False
         logging.info("Get vacancy data from vacancy creating form")
 
         validator = VacancyFormValidator(vacancy_name, vacancy_salary, vacancy_about, vacancy_contacts)
@@ -53,7 +60,8 @@ def vacancy_create():
 
         category = Category.query.filter_by(name=vacancy_category).first()
         new_vacancy = Vacancy(name=vacancy_name, salary=vacancy_salary, info=vacancy_about,
-                              contacts=vacancy_contacts, user=current_user.id, category=category.id)
+                              contacts=vacancy_contacts, notification=vacancy_notification,
+                              user=current_user.id, category=category.id)
         db.session.add(new_vacancy)
         db.session.commit()
         logging.info("New vacancy created")
@@ -90,7 +98,7 @@ def vacancies_show(category_slug):
     return render_template("vacancies.html", **content)
 
 
-@vacancies_view.route("/vacancy/<vacancy_slug>", methods=["GET"])
+@vacancies_view.route("/vacancy/<vacancy_slug>", methods=["GET", "POST"])
 @login_required
 def vacancy_detail(vacancy_slug):
     """
@@ -98,6 +106,17 @@ def vacancy_detail(vacancy_slug):
     :param vacancy_slug:
     :return: rendered template
     """
+    if request.method == "POST":
+        data = json.loads(request.data)
+        if data["notification"]:
+            current_vacancy = Vacancy.query.filter_by(slug=vacancy_slug).first()
+            owner = User.query.filter_by(id=current_vacancy.user).first()
+            msg = Message("Someone watch your contacts", sender=TestBaseConfig.MAIL_USERNAME,
+                          recipients=[owner.email])
+            msg.body = f"Someone found out about your job in this vacancy - {current_vacancy.name}"
+            mail.send(msg)
+            return "Message sent"
+
     current_vacancy = Vacancy.query.filter_by(slug=vacancy_slug).first()
     logging.info(f"Show vacancy detail - {current_vacancy.name}")
     content = {"vacancy": current_vacancy, "user": current_user}

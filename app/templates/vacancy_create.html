@@ -24,6 +24,11 @@
             <textarea class="form-control" name="contacts" id="contactFormControlTextarea" rows="4"></textarea>
         </div>
 
+        <div class="form-check">
+          <label class="form-check-label" for="flexCheckDefault">Notify about view contacts</label>
+          <input class="form-check-input" name="notify" type="checkbox" id="flexCheckDefault">
+        </div>
+
         <select name="category" class="form-select" aria-label="Default select example">
             {% for category in categories %}
                 <option value="{{ category.name }}">{{ category.name }}</option>
