@@ -6,7 +6,7 @@
 {% block content %}
     <h1 class="categories-title">Vacancies</h1>
     {% if filter_flag %}
-        {% for vac in category_vacancies %}
+        {% for vac in category_vacancies|reverse %}
             <div class="card" style="width: 800px;">
               <h5 class="card-header">{{ vac.name }}</h5>
               <div class="card-body">
@@ -17,7 +17,7 @@
             </div>
         {% endfor %}
     {% else %}
-        {% for vac in category_vacancies.vacancies %}
+        {% for vac in category_vacancies.vacancies|reverse %}
             <div class="card" style="width: 800px;">
               <h5 class="card-header">{{ vac.name }}</h5>
               <div class="card-body">

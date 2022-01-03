@@ -15,7 +15,7 @@
                             left: 400px; top: 350px;
                             padding: 25px 42px; text-align: center; text-decoration: none; border-radius: 8px;">
                     <a style="text-decoration: none;" href="{{ url_for('vacancies.vacancy_create') }}">Create</a></button>
-                {% for vac in exists_vacancies %}
+                {% for vac in exists_vacancies|reverse %}
                     <div class="card" style="margin-top: 15px">
                         <div class="card-body">
                             <div class="card-body" style="margin: 20px">

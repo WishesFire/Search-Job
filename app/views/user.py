@@ -14,6 +14,7 @@ from flask import Blueprint, request, redirect, url_for, render_template, flash
 from app.service.auth import util_signup, util_login
 from app.models.model import User, Vacancy
 from flask_login import login_user, logout_user, login_required, current_user
+from app import db
 
 
 auth_view = Blueprint("auth", __name__)
@@ -88,8 +89,10 @@ def profile():
         logging.info(f"Deleted data - {data['name']}")
         if data["name"]:
             Vacancy.query.filter_by(name=data["name"], user=current_user.id).delete()
-
-    logging.info("User open profile")
-    user = User.query.filter_by(email=current_user.email).first()
-    content = {"user": current_user, "exists_vacancies": user.vacancies}
-    return render_template("user/profile.html", **content)
+            db.session.commit()
+        return "Deleted"
+    else:
+        logging.info("User open profile")
+        user = User.query.filter_by(email=current_user.email).first()
+        content = {"user": current_user, "exists_vacancies": user.vacancies}
+        return render_template("user/profile.html", **content)
