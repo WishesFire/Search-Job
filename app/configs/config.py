@@ -38,6 +38,9 @@ class TestBaseConfig(object):
     MAIL_USE_TLS = False
     MAIL_USE_SSL = True
 
+    ADMIN_MAIL = environ.get("ADMIN_MAIL")
+    ADMIN_PASSWORD = environ.get("ADMIN_PASSWORD")
+
 
 class InitTestDataDB:
     CATEGORIES = {"Designer", "Accountant", "Lawyer", "Programmer",

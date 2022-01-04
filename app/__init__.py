@@ -30,6 +30,7 @@ from flask_restful import Api
 from flask_marshmallow import Marshmallow
 from flask_jwt_extended import JWTManager
 from flask_mail import Mail
+from flask_admin import Admin
 
 
 # Init elements
@@ -40,6 +41,7 @@ csrf = CSRFProtect()
 ma = Marshmallow()
 jwt = JWTManager()
 mail = Mail()
+admin = Admin(name='jobs', template_mode='bootstrap3')
 
 # Logging
 if TestBaseConfig.LOGGING:
@@ -74,22 +76,31 @@ def create_app():
 
     from app.models.model import Category, Vacancy, User
     from app.routes import register_handlers, register_api_handlers
+    from app.views.user import JobAdminModelView
 
     @login_manager.user_loader
     def load_user(user_id):
         return User.query.get(int(user_id))
 
+    # First run
     if not database_exists(TestBaseConfig.SQLALCHEMY_DATABASE_URI):
         create_database(TestBaseConfig.SQLALCHEMY_DATABASE_URI)
         with app.app_context():
             db.create_all()
 
-        from .models.handlers import init_start_categories
+        from .models.handlers import init_start_categories, init_admin_user
         init_start_categories(app)
+        init_admin_user(app)
 
     # Registration handlers
     register_handlers(app)
     register_api_handlers(api)
+
+    # Admin panel
+    admin.init_app(app)
+    admin.add_view(JobAdminModelView(Category, db.session))
+    admin.add_view(JobAdminModelView(Vacancy, db.session))
+    admin.add_view(JobAdminModelView(User, db.session))
 
     csrf.exempt(api_bp)
     app.register_blueprint(api_bp, url_prefix="/api")

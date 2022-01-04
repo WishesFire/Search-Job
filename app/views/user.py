@@ -15,6 +15,8 @@ from app.service.auth import util_signup, util_login
 from app.models.model import User, Vacancy
 from flask_login import login_user, logout_user, login_required, current_user
 from app import db
+from app.configs.config import TestBaseConfig
+from flask_admin.contrib.sqla import ModelView
 
 
 auth_view = Blueprint("auth", __name__)
@@ -82,6 +84,7 @@ def logout():
 def profile():
     """
     Profile of the user with his vacancies and the ability to create new ones
+    Can delete own vacancies
     :return: rendered template
     """
     if request.method == "DELETE":
@@ -96,3 +99,22 @@ def profile():
         user = User.query.filter_by(email=current_user.email).first()
         content = {"user": current_user, "exists_vacancies": user.vacancies}
         return render_template("user/profile.html", **content)
+
+
+class JobAdminModelView(ModelView):
+    """
+    User admin check
+    """
+    def is_accessible(self):
+        """
+        Check whether the user is registered and logged in as an administrator
+        """
+        if not current_user.is_authenticated or current_user.email != TestBaseConfig.ADMIN_MAIL:
+            return False
+        return True
+
+    def inaccessible_callback(self, name, **kwargs):
+        """
+        Redirects to the registration page
+        """
+        return redirect(url_for('auth.login'))
