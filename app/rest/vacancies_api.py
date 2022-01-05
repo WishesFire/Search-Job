@@ -38,11 +38,11 @@ class VacancyAPI(Resource):
             return vacancies_serialize, 200
 
         except exc.ArgumentError:
-            return {"msg": "Invalid or conflicting function argument is supplied"}
+            return {"msg": "Invalid or conflicting function argument is supplied"}, 404
         except exc.SQLAlchemyError:
-            return {"msg": "Execution of a database operation fails"}
+            return {"msg": "Execution of a database operation fails"}, 404
         except Exception as error:
-            return {"msg": error}
+            return {"msg": error}, 404
 
     @classmethod
     @jwt_required()
@@ -78,15 +78,15 @@ class VacancyAPI(Resource):
             return {"msg": "Category is not founded"}, 401
 
         except exc.ArgumentError:
-            return {"msg": "Invalid or conflicting function argument is supplied"}
+            return {"msg": "Invalid or conflicting function argument is supplied"}, 404
         except exc.SQLAlchemyError:
-            return {"msg": "Execution of a database operation fails"}
+            return {"msg": "Execution of a database operation fails"}, 404
         except Exception as error:
-            return {"msg": error}
+            return {"msg": error}, 404
 
     @classmethod
     @jwt_required()
-    def put(cls):
+    def put(cls, category_slug):
         """
         Update the opening vacancy
         Parameters: current_name, name, salary, about, contacts
@@ -101,28 +101,31 @@ class VacancyAPI(Resource):
             about = args.get("about")
             contacts = args.get("contacts")
             vacancy = Vacancy.query.filter_by(name=current_name, user=user_id).first()
-            if name:
-                vacancy.name = name
-            elif salary:
-                vacancy.salary = salary
-            elif about:
-                vacancy.info = about
-            elif contacts:
-                vacancy.contacts = contacts
-            db.session.commit()
+            if vacancy:
+                if name:
+                    vacancy.name = name
+                elif salary:
+                    vacancy.salary = salary
+                elif about:
+                    vacancy.info = about
+                elif contacts:
+                    vacancy.contacts = contacts
+                db.session.commit()
 
-            return {"msg": "Vacancy successfully updated"}
+                return {"msg": "Vacancy successfully updated"}, 200
+
+            return {"msg": "It's not your vacancy"}, 400
 
         except exc.ArgumentError:
-            return {"msg": "Invalid or conflicting function argument is supplied"}
+            return {"msg": "Invalid or conflicting function argument is supplied"}, 404
         except exc.SQLAlchemyError:
-            return {"msg": "Execution of a database operation fails"}
+            return {"msg": "Execution of a database operation fails"}, 404
         except Exception as error:
-            return {"msg": error}
+            return {"msg": error}, 404
 
     @classmethod
     @jwt_required()
-    def delete(cls):
+    def delete(cls, category_slug):
         """
         Delete an existing vacancy
         Parameters: name
@@ -135,11 +138,11 @@ class VacancyAPI(Resource):
             Vacancy.query.filter_by(name=name, user=user_id).delete()
             db.session.commit()
 
-            return {"msg": f"Vacancy - {name} successfully deleted"}
+            return {"msg": f"Vacancy - {name} successfully deleted"}, 200
 
         except exc.ArgumentError:
-            return {"msg": "Invalid or conflicting function argument is supplied"}
+            return {"msg": "Invalid or conflicting function argument is supplied"}, 404
         except exc.SQLAlchemyError:
-            return {"msg": "Execution of a database operation fails"}
+            return {"msg": "Execution of a database operation fails"}, 404
         except Exception as error:
-            return {"msg": error}
+            return {"msg": error}, 404

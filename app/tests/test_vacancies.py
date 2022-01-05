@@ -1,21 +1,7 @@
-import pytest
-from app import create_app, db
+from . import client
 
-app = create_app()
 
 STATUS_CODE = 200
-
-
-@pytest.fixture
-def client():
-    """
-    Create new application as client
-    :return: copy app client
-    """
-    app.config["TESTING"] = True
-    app.config["WTF_CSRF_ENABLED"] = False
-    with app.test_client() as client:
-        yield client
 
 
 def test_create_vacancy(client):

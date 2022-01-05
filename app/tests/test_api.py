@@ -1,9 +1,7 @@
-import pytest
 import json
+from . import client, app
 from app.models.model import User
-from app import create_app, db
-
-app = create_app()
+from app import db
 
 
 LOGIN_TOKEN = ""
@@ -16,18 +14,6 @@ contacts = "+390423423"
 email = "lol@mail.com"
 password1 = "12345"
 password2 = "12345"
-
-
-@pytest.fixture
-def client():
-    """
-    Create new application as client
-    :return: copy app client
-    """
-    app.config["TESTING"] = True
-    app.config["WTF_CSRF_ENABLED"] = False
-    with app.test_client() as client:
-        yield client
 
 
 def test_connection(client):
@@ -50,16 +36,6 @@ def test_get_categories(client):
     response = client.get("/api/categories")
     assert response.status_code == 200
     assert response.json
-
-
-def test_get_vacancies(client):
-    """
-    test `/api/vacancies/category_slug` - Get vacancies at slug
-    :param client: cope app client
-    :return: Passed status if code is similar
-    """
-    response = client.get(f"/api/vacancies/{category_slug}")
-    assert response.status_code == 200
 
 
 def test_signup_login(client):
@@ -89,6 +65,27 @@ def test_signup_login(client):
     assert response.json["token"] == LOGIN_TOKEN
 
 
+def test_api_profile(client):
+    """
+    test `/api/auth/profile` - Show only user vacancies
+    :param client: cope app client
+    :return: Passed status if code is similar
+    """
+    response = client.get("/api/auth/profile",
+                          headers={"Content-Type": "application/json", "Authorization": f"Bearer {LOGIN_TOKEN}"})
+    assert response.status_code == 200
+
+
+def test_get_vacancies(client):
+    """
+    test `/api/vacancies/category_slug` - Get vacancies at slug
+    :param client: cope app client
+    :return: Passed status if code is similar
+    """
+    response = client.get(f"/api/vacancies/{category_slug}")
+    assert response.status_code == 200
+
+
 def test_post_vacancy(client):
     """
     test `api/vacancies/category_slug` (POST) - Create new test vacancy
@@ -103,6 +100,11 @@ def test_post_vacancy(client):
 
 
 def test_put_vacancy(client):
+    """
+
+    :param client:
+    :return:
+    """
     response = client.put(f"/api/vacancies/{category_slug}",
                           headers={"Content-Type": "application/json", "Authorization": f"Bearer {LOGIN_TOKEN}"},
                           data=json.dumps({"current_name": name, "salary": 99999}))

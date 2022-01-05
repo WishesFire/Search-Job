@@ -98,9 +98,9 @@ def create_app():
 
     # Admin panel
     admin.init_app(app)
-    admin.add_view(JobAdminModelView(Category, db.session))
-    admin.add_view(JobAdminModelView(Vacancy, db.session))
-    admin.add_view(JobAdminModelView(User, db.session))
+    admin.add_view(JobAdminModelView(Category, db.session, endpoint="category_"))
+    admin.add_view(JobAdminModelView(Vacancy, db.session, endpoint="vacancy_"))
+    admin.add_view(JobAdminModelView(User, db.session, endpoint="user_"))
 
     csrf.exempt(api_bp)
     app.register_blueprint(api_bp, url_prefix="/api")

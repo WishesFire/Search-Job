@@ -6,6 +6,9 @@ RegistrationUserAPI - (POST)
 
 import datetime
 from flask_restful import Resource
+from app.models.model import Vacancy
+from app.rest.serializers import vacancies_schema
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from app.service.auth import util_signup, util_login
 from flask_jwt_extended import create_access_token
 from .handlers import login_user_post_args, registration_user_post_args
@@ -48,3 +51,19 @@ class RegistrationUserAPI(Resource):
             user_id = user.id
             return {"msg": "User successfully created", "id": str(user_id)}, 200
         return {"msg": "Failed with registration new user"}, 401
+
+
+class ProfileUserAPI(Resource):
+    """
+    Show user-created vacancies
+    """
+
+    @classmethod
+    @jwt_required()
+    def get(cls):
+        user_id = get_jwt_identity()
+        all_vacancies = Vacancy.query.filter_by(user=user_id).all()
+        if all_vacancies:
+            vacancies_serialize = vacancies_schema.dump(all_vacancies)
+            return vacancies_serialize, 200
+        return {"msg": "No vacancies"}, 200

@@ -10,7 +10,7 @@ from .views.error import error_view
 from .rest.main_api import TestConnection
 from .rest.categories_api import CategoryAPI
 from .rest.vacancies_api import VacancyAPI
-from .rest.user_api import LoginUserAPI, RegistrationUserAPI
+from .rest.user_api import LoginUserAPI, RegistrationUserAPI, ProfileUserAPI
 
 
 def register_handlers(app):
@@ -48,3 +48,4 @@ def register_api_handlers(api):
     # Auth
     api.add_resource(RegistrationUserAPI, "/auth/signup")
     api.add_resource(LoginUserAPI, "/auth/login")
+    api.add_resource(ProfileUserAPI, "/auth/profile")
