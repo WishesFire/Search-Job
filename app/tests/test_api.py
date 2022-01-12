@@ -101,9 +101,9 @@ def test_post_vacancy(client):
 
 def test_put_vacancy(client):
     """
-
-    :param client:
-    :return:
+    test `api/vacancies/category_slug` (PUT) - Update test vacancy
+    :param client: cope app client
+    :return: Passed status if code is similar
     """
     response = client.put(f"/api/vacancies/{category_slug}",
                           headers={"Content-Type": "application/json", "Authorization": f"Bearer {LOGIN_TOKEN}"},

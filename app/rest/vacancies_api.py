@@ -1,6 +1,6 @@
 """
 This module works for restful api
-VacancyAPI - (GET, POST, DELETE)
+VacancyAPI - (GET, POST, PUT, DELETE)
 """
 
 from flask_restful import Resource

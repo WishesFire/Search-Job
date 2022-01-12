@@ -21,7 +21,7 @@
             <div class="card" style="width: 800px;">
               <h5 class="card-header">{{ vac.name }}</h5>
               <div class="card-body">
-                <h5 class="card-title">Salary: {{ vac.salary }}</h5>
+                <h5 class="card-title">Salary: {{ vac.salary }}$</h5>
                 <p class="card-text" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ vac.info }}</p>
                 <a href="{{ url_for('vacancies.vacancy_detail', vacancy_slug=vac.slug) }}" class="btn btn-primary">Go</a>
               </div>
