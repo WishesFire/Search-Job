@@ -1,7 +1,15 @@
+"""
+Special tools used in rest / api.
+"""
+
 from sqlalchemy import exc
 
 
 def vacancy_check(func):
+    """
+    Check the rest function for errors
+    :param func: any rest func
+    """
     def wrapper(*args, **kwargs):
         try:
             return func(*args, **kwargs)

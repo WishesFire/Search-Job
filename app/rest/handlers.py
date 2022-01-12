@@ -24,6 +24,10 @@ registration_user_post_args.add_argument("email", type=str, help="User email", r
 registration_user_post_args.add_argument("password1", type=str, help="First user password", required=True)
 registration_user_post_args.add_argument("password2", type=str, help="Similar user password", required=True)
 
+# Categories (GET)
+category_get_args = reqparse.RequestParser()
+category_get_args.add_argument("average_salary", type=bool, help="", required=False)
+
 # VacancyAPI (GET)
 vacancy_get_args = reqparse.RequestParser()
 vacancy_get_args.add_argument("filterSalary", type=float, help="Price for filter", required=False)

@@ -6,7 +6,6 @@ STATUS_CODE = 200
 def test_config():
     """
     Check application config
-    :param client: copy app client
     :return: Passed status if code is similar
     """
     assert app.config["DEBUG"]
