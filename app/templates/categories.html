@@ -13,6 +13,7 @@
                 <a href="{{ url_for('vacancies.vacancies_show', category_slug=category.slug) }}">
                     <h5 class="card-title">{{ category.name }}</h5></a>
                 <p>Number: {{ category.vacancies|length }}</p>
+                <p>Average salary: {{ average_salary[category.name] }}</p>
             </div>
           </div>
         </div>

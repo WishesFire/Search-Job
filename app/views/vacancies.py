@@ -28,7 +28,16 @@ def categories_show():
     """
     logging.info("Show all categories")
     categories = Category.query.all()
-    content = {"categories": categories, "user": current_user}
+    average_salary = {}
+    for category in categories:
+        average = 0
+        for vacancy in category.vacancies:
+            average += vacancy.salary
+        if average > 0:
+            average_salary[category.name] = int(average / len(category.vacancies))
+        else:
+            average_salary[category.name] = 0
+    content = {"categories": categories, "average_salary": average_salary, "user": current_user}
     logging.info(f"All categories - {categories}")
     return render_template("categories.html", **content)
 
