@@ -18,6 +18,7 @@ NAME = "123123"
 SALARY = 233.0
 ABOUT = "Good job"
 CONTACTS = "+390423423"
+FILTER_SALARY = 100.0
 
 EMAIL = "lol@mail.com"
 PASSWORD1 = "12345"
@@ -90,7 +91,7 @@ def test_api_profile(client):
 
 def test_get_vacancies(client):
     """
-    test `/api/vacancies/category_slug` - Get vacancies at slug
+    test `/api/vacancies/category_slug` (GET) - Get vacancies at slug
     :param client: cope app client
     :return: Passed status if code is similar
     """
@@ -139,3 +140,47 @@ def test_delete_vacancy(client):
                              data=json.dumps({"name": NAME}))
     assert response.status_code == 200
     assert response.json["msg"] == f"Vacancy - {NAME} successfully deleted"
+
+
+def test_get_vacancies_filter(client):
+    """
+    test `/api/vacancies/category_slug` - Get vacancies at slug with filterSalary
+    :param client: cope app client
+    :return: Passed status if code is similar
+    """
+    response = client.get(f"/api/vacancies/{CATEGORY_SLUG}",
+                          data=json.dumps({"filterSalary": FILTER_SALARY}))
+    assert response.status_code == 200
+
+
+def test_post_vacancy_error_not_data(client):
+    """
+    test `api/vacancies/category_slug` (POST) - Create error vacancy with bad category slug
+    :param client: cope app client
+    :return: Passed status if code is similar
+    """
+    response = client.get("/api/vacancies/111")
+    assert response.status_code == 404
+
+
+def test_put_vacancy_error(client):
+    """
+    test `api/vacancies/category_slug` (PUT) - Create update error vacancy with not vacancy your
+    :param client: cope app client
+    :return: Passed status if code is similar
+    """
+    response = client.put(f"/api/vacancies/{CATEGORY_SLUG}",
+                          headers={"Content-Type": "application/json",
+                                   "Authorization": f"Bearer {LOGIN_TOKEN}"},
+                          data=json.dumps({"current_name": 99999999}))
+    assert response.status_code == 400
+    assert response.json["msg"] == "It's not your vacancy"
+
+
+def test_delete_vacancy_error(client):
+    response = client.delete(f"/api/vacancies/{CATEGORY_SLUG}",
+                             headers={"Content-Type": "application/json",
+                                      "Authorization": f"Bearer {LOGIN_TOKEN}"},
+                             data=json.dumps({"name": 99999}))
+    assert response.status_code == 400
+    assert response.json["msg"] == "Name of vacancy don't find"

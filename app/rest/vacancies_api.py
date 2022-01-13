@@ -120,7 +120,8 @@ class VacancyAPI(Resource):
         user_id = get_jwt_identity()
         args = vacancy_delete_args.parse_args()
         name = args.get("name")
-        Vacancy.query.filter_by(name=name, user=user_id).delete()
-        db.session.commit()
+        if Vacancy.query.filter_by(name=name, user=user_id).delete():
+            db.session.commit()
+            return {"msg": f"Vacancy - {name} successfully deleted"}, 200
 
-        return {"msg": f"Vacancy - {name} successfully deleted"}, 200
+        return {"msg": "Name of vacancy don't find"}, 400
