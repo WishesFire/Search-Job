@@ -14,7 +14,7 @@ before_install:
   - sudo service mysql restart
 
 script:
-  # - pylint app
+  - pylint app
   - py.test --cov=app/tests/
   - coverage report
 

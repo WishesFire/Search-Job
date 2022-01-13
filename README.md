@@ -15,7 +15,7 @@ App functionality:
   - Creating your own vacancies;
   - Update and delete vacancy;
 
-More information can be found here - SRS
+More information can be found here - [SRS](https://docs.google.com/document/d/17z8ru0JREH26Fc7nPo_qCPDoeLxHFVaTj_CDVSsdhmw/edit?usp=sharing)
 
 ----
 ## Basic technologies:
