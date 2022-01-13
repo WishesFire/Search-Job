@@ -1,3 +1,8 @@
+"""
+Creates a client object for application testing
+"""
+# pylint: disable=redefined-outer-name
+
 import pytest
 from app import create_app
 
@@ -9,7 +14,6 @@ app = create_app()
 def client():
     """
     Create new application as client
-    :return: copy app client
     """
     app.config["TESTING"] = True
     app.config["WTF_CSRF_ENABLED"] = False

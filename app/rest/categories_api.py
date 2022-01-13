@@ -9,6 +9,9 @@ from app.rest.serializers import categories_schema
 
 
 class CategoryAPI(Resource):
+    """
+    (GET): show all categories
+    """
     @classmethod
     def get(cls):
         """

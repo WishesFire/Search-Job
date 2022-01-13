@@ -6,11 +6,10 @@ RegistrationUserAPI - (POST)
 
 import datetime
 from flask_restful import Resource
-from app.models.model import Vacancy
+from flask_jwt_extended import jwt_required, get_jwt_identity, create_access_token
 from app.rest.serializers import vacancies_schema
-from flask_jwt_extended import jwt_required, get_jwt_identity
 from app.service.auth import util_signup, util_login
-from flask_jwt_extended import create_access_token
+from app.models.model import Vacancy
 from .handlers import login_user_post_args, registration_user_post_args
 
 
@@ -21,6 +20,10 @@ class LoginUserAPI(Resource):
 
     @classmethod
     def post(cls):
+        """
+        Log into the user's account
+        :return: msg or token
+        """
         args = login_user_post_args.parse_args()
         email = args.get("email")
         password = args.get("password")
@@ -41,6 +44,10 @@ class RegistrationUserAPI(Resource):
 
     @classmethod
     def post(cls):
+        """
+        Creating a new account
+        :return: msg
+        """
         args = registration_user_post_args.parse_args()
         email = args.get("email")
         password1 = args.get("password1")
@@ -61,6 +68,10 @@ class ProfileUserAPI(Resource):
     @classmethod
     @jwt_required()
     def get(cls):
+        """
+        Show user's vacancies
+        :return: user's vacancies or msg
+        """
         user_id = get_jwt_identity()
         all_vacancies = Vacancy.query.filter_by(user=user_id).all()
         if all_vacancies:

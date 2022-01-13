@@ -1,3 +1,9 @@
+"""
+Testing is related to the interaction with vacancies
+"""
+# pylint: disable=redefined-outer-name
+# pylint: disable=unused-import
+
 from . import client
 
 
@@ -17,9 +23,10 @@ def test_create_vacancy(client):
     example_contacts = "example@mail.com"
     example_category = "Designer"
 
-    result = client.post("/vacancy_create", data={"name": example_name, "salary": example_salary,
-                                                  "about": example_about, "contacts": example_contacts,
-                                                  "category": example_category}, follow_redirects=True)
+    result = client.post("/vacancy_create",
+                         data={"name": example_name, "salary": example_salary,
+                               "about": example_about, "contacts": example_contacts,
+                               "category": example_category}, follow_redirects=True)
     assert result.status_code == STATUS_CODE
 
 

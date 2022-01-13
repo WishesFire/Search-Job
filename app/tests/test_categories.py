@@ -1,7 +1,12 @@
-from . import client, app
+"""
+Testing is related to the interaction with categories functions
+"""
+# pylint: disable=redefined-outer-name
+# pylint: disable=unused-import
+
 from app import db
 from app.models.model import Category
-
+from . import client, app
 
 STATUS_CODE = 200
 

@@ -2,18 +2,25 @@
 This module works for restful api
 VacancyAPI - (GET, POST, PUT, DELETE)
 """
+# pylint: disable=unused-argument
+# pylint: disable=literal-comparison
 
 from flask_restful import Resource
-from app import db
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from app.models.model import Vacancy, Category
 from app.rest.serializers import vacancies_schema
-from .handlers import vacancy_post_args, vacancy_delete_args, vacancy_put_args, vacancy_get_args
 from app.service.validartors import VacancyFormValidator
+from app import db
+from .handlers import vacancy_post_args, vacancy_delete_args, vacancy_put_args, vacancy_get_args
 from .utils import vacancy_check
 
 
 class VacancyAPI(Resource):
+    """
+    Interaction with vacancies through restful api
+    VacancyAPI - (GET, POST, PUT, DELETE)
+    """
+
     @classmethod
     @vacancy_check
     def get(cls, category_slug):

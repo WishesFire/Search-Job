@@ -21,8 +21,10 @@ login_user_post_args.add_argument("password", type=str, help="User password", re
 # RegistrationUserAPI (POST)
 registration_user_post_args = reqparse.RequestParser()
 registration_user_post_args.add_argument("email", type=str, help="User email", required=True)
-registration_user_post_args.add_argument("password1", type=str, help="First user password", required=True)
-registration_user_post_args.add_argument("password2", type=str, help="Similar user password", required=True)
+registration_user_post_args.add_argument("password1", type=str,
+                                         help="First user password", required=True)
+registration_user_post_args.add_argument("password2", type=str,
+                                         help="Similar user password", required=True)
 
 # VacancyAPI (GET)
 vacancy_get_args = reqparse.RequestParser()
@@ -37,11 +39,13 @@ vacancy_post_args.add_argument("contacts", type=str, help="Vacancy contacts", re
 
 # VacancyAPI (DELETE)
 vacancy_delete_args = reqparse.RequestParser()
-vacancy_delete_args.add_argument("name", type=str, help="The main name of the vacancy", required=True)
+vacancy_delete_args.add_argument("name", type=str,
+                                 help="The main name of the vacancy", required=True)
 
 # VacancyAPI (PUT)
 vacancy_put_args = reqparse.RequestParser()
-vacancy_put_args.add_argument("current_name", type=str, help="Current name of the vanancy", required=True)
+vacancy_put_args.add_argument("current_name", type=str,
+                              help="Current name of the vanancy", required=True)
 vacancy_put_args.add_argument("name", type=str, help="The main name of the vacancy", required=False)
 vacancy_put_args.add_argument("salary", type=float, help="Salary vacancies", required=False)
 vacancy_put_args.add_argument("about", type=str, help="Vacancy information", required=False)

@@ -1,3 +1,9 @@
+"""
+Testing is related to the interaction with main page and config
+"""
+# pylint: disable=redefined-outer-name
+# pylint: disable=unused-import
+
 from . import client, app
 
 STATUS_CODE = 200

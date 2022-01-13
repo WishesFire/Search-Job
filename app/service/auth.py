@@ -4,11 +4,14 @@ Requires user registration and login utilities:
     - `util_login`: requirement validation parameters
 """
 
+# pylint: disable=unused-variable
+# pylint: disable=inconsistent-return-statements
+
 import logging
 from werkzeug.security import generate_password_hash
+from sqlalchemy import exc
 from app.service.validartors import RegistrationFormValidator, LoginFormValidator
 from app.models.model import User
-from sqlalchemy import exc
 from app import db
 
 
@@ -33,7 +36,7 @@ def util_signup(email, password_1, password_2):
             db.session.commit()
             logging.info("New user is created")
             return new_user
-        except ValueError or exc.DataError:
+        except (ValueError, exc.DataError):
             return False
     elif not email_status or not password_status:
         return False
@@ -47,7 +50,7 @@ def util_login(email, password):
     :return: validation user status, msg about error, user from bd
     """
     user = User.query.filter_by(email=email).first()
-    validator = LoginFormValidator(email, password, user)
+    validator = LoginFormValidator(password, user)
     user_status, user_error_msg = validator.check_user_exists()
     logging.info("Validation is DONE")
 

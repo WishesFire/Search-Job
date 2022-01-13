@@ -5,9 +5,11 @@ Validators:
     - `LoginFormValidator`: used to check_user_exists
     - `VacancyFormValidator`: used to check_name, check_salary, check_category
 """
+# pylint: disable=too-few-public-methods
+# pylint: disable=no-else-return
 
-from app.models.model import User, Category
 from werkzeug.security import check_password_hash
+from app.models.model import User, Category
 
 
 class RegistrationFormValidator:
@@ -49,25 +51,23 @@ class LoginFormValidator:
     """
     Validator of login input data
     """
-    def __init__(self, email, password, user_checked):
+    def __init__(self, password, user_checked):
         """
-        :param email: user mail
         :param password: user password
         :param user_checked: instance of the user from the database
         """
-        self.email = email
-        self.password = password
-        self.user_checked = user_checked
+        self._password = password
+        self._user_checked = user_checked
 
     def check_user_exists(self):
         """
         Checks the password cache and whether the user is in the database
         :return: Status, message about error or None
         """
-        if not self.user_checked:
+        if not self._user_checked:
             msg = "User does not exist"
             return False, msg
-        elif not check_password_hash(self.user_checked.password, self.password):
+        elif not check_password_hash(self._user_checked.password, self._password):
             msg = "Wrong password"
             return False, msg
 
@@ -104,6 +104,7 @@ class VacancyFormValidator:
         """
         if not isinstance(self.salary, float) or not isinstance(self.salary, int):
             return float(self.salary)
+        return self.salary
 
     def check_category(self):
         """
@@ -114,4 +115,4 @@ class VacancyFormValidator:
             result = Category.query.filter_by(slug=str(self.category).title()).first()
             if result:
                 return result
-            return False
+        return False

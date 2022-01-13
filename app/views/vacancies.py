@@ -5,6 +5,10 @@ Views:
     - `vacancy_create (/vacancy_create)`: Show vacancy create form
     - `vacancy_detail (/vacancy/<vacancy_slug>)`: Show detail about vacancy
 """
+# pylint: disable=logging-fstring-interpolation
+# pylint: disable=wrong-import-order
+# pylint: disable=ungrouped-imports
+# pylint: disable=simplifiable-if-statement
 
 import logging
 import json
@@ -49,7 +53,8 @@ def categories_show():
 @login_required
 def vacancy_create():
     """
-    Vacancy information form (Name, salary, about, notification, contacts). Then the vacancy appears in the list
+    Vacancy information form (Name, salary, about, notification, contacts).
+    Then the vacancy appears in the list
     :return: rendered template
     """
     if request.method == "POST":
@@ -64,8 +69,8 @@ def vacancy_create():
         else:
             vacancy_notification = False
         logging.info("Get vacancy data from vacancy creating form")
-
-        validator = VacancyFormValidator(vacancy_name, vacancy_salary, vacancy_about, vacancy_contacts)
+        validator = VacancyFormValidator(vacancy_name, vacancy_salary,
+                                         vacancy_about, vacancy_contacts)
         vacancy_name = validator.check_name()
         vacancy_salary = validator.check_salary()
         logging.info("Validation is DONE")
@@ -100,7 +105,8 @@ def vacancies_show(category_slug):
             salary_average = float(salary_average)
             category = Category.query.filter_by(slug=category_slug).first()
             logging.info(f"Current category - {category.name}")
-            vacancies = Vacancy.query.filter_by(category=category.id).filter(Vacancy.salary <= salary_average).all()
+            vacancies = Vacancy.query.filter_by(category=category.id).\
+                filter(Vacancy.salary <= salary_average).all()
             logging.info(f"All filtered vacancies - {vacancies}")
             content = {"category_vacancies": vacancies, "user": current_user, "filter_flag": True}
             return render_template("vacancies.html", **content)

@@ -2,6 +2,8 @@
 Views:
     - `home (/)`: Show main page with information about project
 """
+# pylint: disable=logging-fstring-interpolation
+
 import logging
 from flask import Blueprint, render_template
 from flask_login import current_user

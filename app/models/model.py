@@ -4,10 +4,12 @@ Database models:
     - `Vacancy`: vacancy model
     - `User`: user model
 """
+# pylint: disable=no-member
+# pylint: disable=too-few-public-methods
 
-from app import db
 from slugify import slugify
 from flask_login import UserMixin
+from app import db
 
 
 class Category(db.Model):

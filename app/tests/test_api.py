@@ -1,19 +1,27 @@
+"""
+Testing is related to the interaction with restful api
+"""
+
+# pylint: disable=redefined-outer-name
+# pylint: disable=unused-import
+# pylint: disable=global-statement
+
 import json
-from . import client, app
 from app.models.model import User
 from app import db
+from . import client, app
 
 
 LOGIN_TOKEN = ""
-category_slug = "designer"
-name = "123123"
-salary = 233.0
-about = "Good job"
-contacts = "+390423423"
+CATEGORY_SLUG = "designer"
+NAME = "123123"
+SALARY = 233.0
+ABOUT = "Good job"
+CONTACTS = "+390423423"
 
-email = "lol@mail.com"
-password1 = "12345"
-password2 = "12345"
+EMAIL = "lol@mail.com"
+PASSWORD1 = "12345"
+PASSWORD2 = "12345"
 
 
 def test_connection(client):
@@ -48,17 +56,20 @@ def test_signup_login(client):
     global LOGIN_TOKEN
 
     with app.app_context():
-        User.query.filter_by(email=email).delete()
+        User.query.filter_by(email=EMAIL).delete()
         db.session.commit()
 
-    response = client.post("/api/auth/signup", headers={"Content-Type": "application/json"},
-                           data=json.dumps({"email": email, "password1": password1, "password2": password2}))
+    response = client.post("/api/auth/signup",
+                           headers={"Content-Type": "application/json"},
+                           data=json.dumps(
+                               {"email": EMAIL, "password1": PASSWORD1,
+                                "password2": PASSWORD2}))
 
     assert response.status_code == 200
     assert response.json["msg"] == "User successfully created"
 
     response = client.post("/api/auth/login", headers={"Content-Type": "application/json"},
-                           data=json.dumps({"email": email, "password": password1}))
+                           data=json.dumps({"email": EMAIL, "password": PASSWORD1}))
     LOGIN_TOKEN = response.json['token']
 
     assert response.status_code == 200
@@ -72,7 +83,8 @@ def test_api_profile(client):
     :return: Passed status if code is similar
     """
     response = client.get("/api/auth/profile",
-                          headers={"Content-Type": "application/json", "Authorization": f"Bearer {LOGIN_TOKEN}"})
+                          headers={"Content-Type": "application/json",
+                                   "Authorization": f"Bearer {LOGIN_TOKEN}"})
     assert response.status_code == 200
 
 
@@ -82,7 +94,7 @@ def test_get_vacancies(client):
     :param client: cope app client
     :return: Passed status if code is similar
     """
-    response = client.get(f"/api/vacancies/{category_slug}")
+    response = client.get(f"/api/vacancies/{CATEGORY_SLUG}")
     assert response.status_code == 200
 
 
@@ -92,9 +104,11 @@ def test_post_vacancy(client):
     :param client: cope app client
     :return: Passed status if code is similar
     """
-    response = client.post(f"/api/vacancies/{category_slug}",
-                           headers={"Content-Type": "application/json", "Authorization": f"Bearer {LOGIN_TOKEN}"},
-                           data=json.dumps({"name": name, "salary": salary, "about": about, "contacts": contacts}))
+    response = client.post(f"/api/vacancies/{CATEGORY_SLUG}",
+                           headers={"Content-Type": "application/json",
+                                    "Authorization": f"Bearer {LOGIN_TOKEN}"},
+                           data=json.dumps({"name": NAME, "salary": SALARY,
+                                            "about": ABOUT, "contacts": CONTACTS}))
     assert response.status_code == 200
     assert response.json["msg"] == "New vacancy successfully created"
 
@@ -105,9 +119,10 @@ def test_put_vacancy(client):
     :param client: cope app client
     :return: Passed status if code is similar
     """
-    response = client.put(f"/api/vacancies/{category_slug}",
-                          headers={"Content-Type": "application/json", "Authorization": f"Bearer {LOGIN_TOKEN}"},
-                          data=json.dumps({"current_name": name, "salary": 99999}))
+    response = client.put(f"/api/vacancies/{CATEGORY_SLUG}",
+                          headers={"Content-Type": "application/json",
+                                   "Authorization": f"Bearer {LOGIN_TOKEN}"},
+                          data=json.dumps({"current_name": NAME, "salary": 99999}))
     assert response.status_code == 200
     assert response.json["msg"] == "Vacancy successfully updated"
 
@@ -118,8 +133,9 @@ def test_delete_vacancy(client):
     :param client: cope app client
     :return: Passed status if code is similar
     """
-    response = client.delete(f"/api/vacancies/{category_slug}",
-                             headers={"Content-Type": "application/json", "Authorization": f"Bearer {LOGIN_TOKEN}"},
-                             data=json.dumps({"name": name}))
+    response = client.delete(f"/api/vacancies/{CATEGORY_SLUG}",
+                             headers={"Content-Type": "application/json",
+                                      "Authorization": f"Bearer {LOGIN_TOKEN}"},
+                             data=json.dumps({"name": NAME}))
     assert response.status_code == 200
-    assert response.json["msg"] == f"Vacancy - {name} successfully deleted"
+    assert response.json["msg"] == f"Vacancy - {NAME} successfully deleted"

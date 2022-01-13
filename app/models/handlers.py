@@ -3,10 +3,10 @@ This model defines is used to populate database with categories
     -`init_start_categories`: create new categories
 """
 
+from werkzeug.security import generate_password_hash
 from app import db
 from app.models.model import Category, User
 from app.configs.config import InitTestDataDB, TestBaseConfig
-from werkzeug.security import generate_password_hash
 
 
 def init_start_categories(app):

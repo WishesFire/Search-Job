@@ -1,8 +1,14 @@
-from . import client, app
-from app import db
+"""
+Testing is related to the interaction with users functions
+"""
+# pylint: disable=redefined-outer-name
+# pylint: disable=unused-import
+
 from werkzeug.security import generate_password_hash
+from app import db
 from app.configs.config import InitTestDataDB
 from app.models.model import User
+from . import client, app
 
 
 STATUS_CODE = 200
@@ -16,7 +22,8 @@ def before_user_access(flag):
         if flag:
             result = User.query.filter_by(email=InitTestDataDB.USER_EMAIL).first()
             if not result:
-                secure_password = generate_password_hash(InitTestDataDB.USER_PASSWORD, method="sha256")
+                secure_password = generate_password_hash(InitTestDataDB.USER_PASSWORD,
+                                                         method="sha256")
                 new_user = User(email=InitTestDataDB.USER_EMAIL, password=secure_password)
                 db.session.add(new_user)
                 db.session.commit()
@@ -74,7 +81,8 @@ def test_post_login_user(client):
     """
     before_user_access(flag=True)
     res = client.post("/login", data={"emailAddress": InitTestDataDB.USER_EMAIL,
-                                      "password": InitTestDataDB.USER_PASSWORD}, follow_redirects=True)
+                                      "password": InitTestDataDB.USER_PASSWORD},
+                      follow_redirects=True)
     assert res.status_code == STATUS_CODE
 
     after_user_delete()
@@ -99,7 +107,8 @@ def test_post_sign_up_user(client):
     :return: Passed status if code is similar
     """
     before_user_access(flag=False)
-    client.post("/signup", data=dict(emailAddress=InitTestDataDB.USER_EMAIL, password1=InitTestDataDB.USER_PASSWORD,
+    client.post("/signup", data=dict(emailAddress=InitTestDataDB.USER_EMAIL,
+                                     password1=InitTestDataDB.USER_PASSWORD,
                                      password2=InitTestDataDB.USER_PASSWORD))
 
     result = User.query.filter_by(email=InitTestDataDB.USER_EMAIL).first()

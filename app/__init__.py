@@ -17,6 +17,9 @@ Subpackages:
 - `routes.py`: defines model representing urls
 """
 # pylint: disable=wrong-import-position
+# pylint: disable=wrong-import-order
+# pylint: disable=import-outside-toplevel
+
 import logging
 from flask import Flask, Blueprint
 from app.configs.config import TestBaseConfig
@@ -46,7 +49,7 @@ admin = Admin(name='jobs', template_mode='bootstrap3')
 # Logging
 if TestBaseConfig.LOGGING:
     logging.basicConfig(filename="record.log", level=logging.INFO, filemode="w",
-                        format=f'%(asctime)s %(levelname)s %(name)s %(threadName)s : %(message)s')
+                        format='%(asctime)s %(levelname)s %(name)s %(threadName)s : %(message)s')
 
 
 def create_app():

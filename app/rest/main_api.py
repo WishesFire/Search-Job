@@ -12,4 +12,8 @@ class TestConnection(Resource):
     """
     @classmethod
     def get(cls):
+        """
+        Check connection
+        :return: Ping: Pong
+        """
         return {"Ping": "Pong"}

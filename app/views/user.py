@@ -7,16 +7,18 @@ Views:
         - Shows user vacancies
         - Create a new vacancy
 """
+# pylint: disable=ungrouped-imports
+# pylint: disable=logging-fstring-interpolation
 
 import json
 import logging
 from flask import Blueprint, request, redirect, url_for, render_template, flash
+from flask_login import login_user, logout_user, login_required, current_user
+from flask_admin.contrib.sqla import ModelView
 from app.service.auth import util_signup, util_login
 from app.models.model import User, Vacancy
-from flask_login import login_user, logout_user, login_required, current_user
 from app import db
 from app.configs.config import TestBaseConfig
-from flask_admin.contrib.sqla import ModelView
 
 
 auth_view = Blueprint("auth", __name__)
@@ -38,8 +40,7 @@ def sign_up():
             login_user(user)
 
             return redirect(url_for("base.home"))
-        else:
-            flash(f"Problem with registration", category='error')
+        flash("Problem with registration", category='error')
 
     return render_template("user/registration.html")
 
@@ -94,11 +95,11 @@ def profile():
             Vacancy.query.filter_by(name=data["name"], user=current_user.id).delete()
             db.session.commit()
         return "Deleted"
-    else:
-        logging.info("User open profile")
-        user = User.query.filter_by(email=current_user.email).first()
-        content = {"user": current_user, "exists_vacancies": user.vacancies}
-        return render_template("user/profile.html", **content)
+
+    logging.info("User open profile")
+    user = User.query.filter_by(email=current_user.email).first()
+    content = {"user": current_user, "exists_vacancies": user.vacancies}
+    return render_template("user/profile.html", **content)
 
 
 class JobAdminModelView(ModelView):

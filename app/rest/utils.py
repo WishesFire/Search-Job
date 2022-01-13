@@ -1,6 +1,8 @@
 """
-Special tools used in rest / api.
+Special tools used in rest api.
 """
+
+# pylint: disable=broad-except
 
 from sqlalchemy import exc
 

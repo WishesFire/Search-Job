@@ -4,6 +4,9 @@ This module used for serializing data
 CategorySchema - data from Category model
 VacancySchema - data from Vacancy model
 """
+# pylint: disable=too-many-ancestors
+# pylint: disable=missing-class-docstring
+# pylint: disable=too-few-public-methods
 
 from app import ma
 from app.models.model import Category, Vacancy
