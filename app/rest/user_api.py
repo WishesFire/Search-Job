@@ -8,8 +8,8 @@ import datetime
 from flask_restful import Resource
 from flask_jwt_extended import jwt_required, get_jwt_identity, create_access_token
 from app.rest.serializers import vacancies_schema
-from app.service.auth import util_signup, util_login
-from app.models.model import Vacancy
+from app.service.auth_service import util_signup, util_login
+from app.service.vacancy_service import VacancyService
 from .handlers import login_user_post_args, registration_user_post_args
 
 
@@ -73,7 +73,7 @@ class ProfileUserAPI(Resource):
         :return: user's vacancies or msg
         """
         user_id = get_jwt_identity()
-        all_vacancies = Vacancy.query.filter_by(user=user_id).all()
+        all_vacancies = VacancyService.find_vacancies_current_user(user_id)
         if all_vacancies:
             vacancies_serialize = vacancies_schema.dump(all_vacancies)
             return vacancies_serialize, 200

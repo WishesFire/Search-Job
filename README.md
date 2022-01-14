@@ -92,7 +92,7 @@ Logout:
 ```
 http://127.0.0.1:5000/logout
 ```
-Admin panel:
+Admin panel (Only for super user):
 ```
 http://127.0.0.1:5000/admin
 ```

@@ -5,9 +5,8 @@ Testing is related to the interaction with users functions
 # pylint: disable=unused-import
 
 from werkzeug.security import generate_password_hash
-from app import db
 from app.configs.config import InitTestDataDB
-from app.models.model import User
+from app.service.user_service import UserService
 from . import client, app
 
 
@@ -20,17 +19,15 @@ def before_user_access(flag):
     """
     with app.app_context():
         if flag:
-            result = User.query.filter_by(email=InitTestDataDB.USER_EMAIL).first()
+            result = UserService.find_user_by_email(InitTestDataDB.USER_EMAIL)
             if not result:
                 secure_password = generate_password_hash(InitTestDataDB.USER_PASSWORD,
                                                          method="sha256")
-                new_user = User(email=InitTestDataDB.USER_EMAIL, password=secure_password)
-                db.session.add(new_user)
-                db.session.commit()
+                UserService.create_new_user(InitTestDataDB.USER_EMAIL, secure_password)
         else:
-            result = User.query.filter_by(email=InitTestDataDB.USER_EMAIL).first()
+            result = UserService.find_user_by_email(InitTestDataDB.USER_EMAIL)
             if result:
-                User.query.filter_by(email=InitTestDataDB.USER_EMAIL).delete()
+                UserService.delete_user(InitTestDataDB.USER_EMAIL)
 
 
 def after_user_delete():
@@ -38,7 +35,7 @@ def after_user_delete():
     Delete user after test
     """
     with app.app_context():
-        User.query.filter_by(email=InitTestDataDB.USER_EMAIL).delete()
+        UserService.delete_user(InitTestDataDB.USER_EMAIL)
 
 
 def test_create_user_db():
@@ -46,19 +43,14 @@ def test_create_user_db():
     Check creating user through the database
     """
     with app.app_context():
-        result = User.query.filter_by(email=InitTestDataDB.USER_EMAIL).first()
+        result = UserService.find_user_by_email(InitTestDataDB.USER_EMAIL)
         if result:
-            User.query.filter_by(email=InitTestDataDB.USER_EMAIL).delete()
-
+            UserService.delete_user(InitTestDataDB.USER_EMAIL)
         secure_password = generate_password_hash(InitTestDataDB.USER_PASSWORD, method="sha256")
-        new_user = User(email=InitTestDataDB.USER_EMAIL, password=secure_password)
-        db.session.add(new_user)
-        db.session.commit()
-
-        result = User.query.filter_by(email=InitTestDataDB.USER_EMAIL).first()
+        UserService.create_new_user(InitTestDataDB.USER_EMAIL, secure_password)
+        result = UserService.find_user_by_email(InitTestDataDB.USER_EMAIL)
         assert result.email == InitTestDataDB.USER_EMAIL
-
-        User.query.filter_by(email=InitTestDataDB.USER_EMAIL).delete()
+        UserService.delete_user(InitTestDataDB.USER_EMAIL)
 
 
 def test_get_login_user(client):
@@ -111,7 +103,7 @@ def test_post_sign_up_user(client):
                                      password1=InitTestDataDB.USER_PASSWORD,
                                      password2=InitTestDataDB.USER_PASSWORD))
 
-    result = User.query.filter_by(email=InitTestDataDB.USER_EMAIL).first()
+    result = UserService.find_user_by_email(InitTestDataDB.USER_EMAIL)
     assert result.email == InitTestDataDB.USER_EMAIL
 
     after_user_delete()

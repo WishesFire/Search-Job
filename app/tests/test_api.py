@@ -7,8 +7,7 @@ Testing is related to the interaction with restful api
 # pylint: disable=global-statement
 
 import json
-from app.models.model import User
-from app import db
+from app.service.user_service import UserService
 from . import client, app
 
 
@@ -57,8 +56,7 @@ def test_signup_login(client):
     global LOGIN_TOKEN
 
     with app.app_context():
-        User.query.filter_by(email=EMAIL).delete()
-        db.session.commit()
+        UserService.delete_user(EMAIL)
 
     response = client.post("/api/auth/signup",
                            headers={"Content-Type": "application/json"},
@@ -178,6 +176,11 @@ def test_put_vacancy_error(client):
 
 
 def test_delete_vacancy_error(client):
+    """
+    test `api/vacancies/category_slug` (DELETE) - Create error delete vacancy with not vacancy your
+    :param client: cope app client
+    :return: Passed status if code is similar
+    """
     response = client.delete(f"/api/vacancies/{CATEGORY_SLUG}",
                              headers={"Content-Type": "application/json",
                                       "Authorization": f"Bearer {LOGIN_TOKEN}"},

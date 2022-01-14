@@ -18,7 +18,7 @@ class CategorySchema(ma.SQLAlchemyAutoSchema):
     """
     class Meta:
         model = Category
-        fields = ("name", "slug")
+        fields = ("name", )
 
 
 class VacancySchema(ma.SQLAlchemyAutoSchema):

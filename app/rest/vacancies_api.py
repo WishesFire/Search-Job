@@ -7,7 +7,9 @@ VacancyAPI - (GET, POST, PUT, DELETE)
 
 from flask_restful import Resource
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from app.models.model import Vacancy, Category
+from app.models.model import Vacancy
+from app.service.category_service import CategoryService
+from app.service.vacancy_service import VacancyService
 from app.rest.serializers import vacancies_schema
 from app.service.validartors import VacancyFormValidator
 from app import db
@@ -31,17 +33,18 @@ class VacancyAPI(Resource):
         :return: json
         """
         args = vacancy_get_args.parse_args()
-        category = Category.query.filter_by(slug=category_slug).first()
-        if args.get("filterSalary"):
-            filter_salary = float(args.get("filterSalary"))
-            all_vacancies = Vacancy.query.filter_by(category=category.id).filter(
-                        Vacancy.salary <= filter_salary).all()
-            if all_vacancies is []:
-                return {"msg": "No vacancies were found for this filter"}, 200
-        else:
-            all_vacancies = Vacancy.query.filter_by(category=category.id).all()
-        vacancies_serialize = vacancies_schema.dump(all_vacancies)
-        return vacancies_serialize, 200
+        category = CategoryService.find_category_by_slug(category_slug)
+        if category:
+            if args.get("filterSalary"):
+                filter_salary = float(args.get("filterSalary"))
+                all_vacancies = VacancyService.find_vacancies_by_filter(category.id, filter_salary)
+                if all_vacancies is []:
+                    return {"msg": "No vacancies were found for this filter"}, 200
+            else:
+                all_vacancies = VacancyService.find_vacancies_by_category(category.id)
+            vacancies_serialize = vacancies_schema.dump(all_vacancies)
+            return vacancies_serialize, 200
+        return {"msg": "There is no such category"}, 404
 
     @classmethod
     @vacancy_check
@@ -67,12 +70,11 @@ class VacancyAPI(Resource):
         category = validator.check_category()
 
         if category:
-            new_vacancy = Vacancy(name=vacancy_name, salary=vacancy_salary, info=about,
-                                  contacts=contacts, user=user_id, category=category.id)
-            db.session.add(new_vacancy)
-            db.session.commit()
+            new_vacancy_id = VacancyService.create_new_vacancy(vacancy_name, vacancy_salary,
+                                                               about, contacts, False,
+                                                               user_id, category.id)
 
-            return {"msg": "New vacancy successfully created", "id": new_vacancy.id}, 200
+            return {"msg": "New vacancy successfully created", "id": new_vacancy_id}, 200
 
         return {"msg": "Category is not founded"}, 401
 
@@ -92,7 +94,7 @@ class VacancyAPI(Resource):
         salary = args.get("salary")
         about = args.get("about")
         contacts = args.get("contacts")
-        vacancy = Vacancy.query.filter_by(name=current_name, user=user_id).first()
+        vacancy = VacancyService.find_vacancy_by_name_user(current_name, user_id)
         if vacancy:
             if name:
                 vacancy.name = name

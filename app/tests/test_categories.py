@@ -6,6 +6,7 @@ Testing is related to the interaction with categories functions
 
 from app import db
 from app.models.model import Category
+from app.service.category_service import CategoryService
 from . import client, app
 
 STATUS_CODE = 200
@@ -40,7 +41,7 @@ def test_add_category():
     category_example = "Testing"
 
     with app.app_context():
-        check_exists = Category.query.filter_by(name=category_example).first()
+        check_exists = CategoryService.find_category_by_name(category_example)
         if check_exists:
             Category.query.filter_by(name=category_example).delete()
 
@@ -48,7 +49,7 @@ def test_add_category():
         db.session.add(new_category)
         db.session.commit()
 
-        result = Category.query.filter_by(name=category_example).first()
+        result = CategoryService.find_category_by_name(category_example)
         assert result.name == "Testing"
 
         Category.query.filter_by(name=category_example).delete()
@@ -61,13 +62,13 @@ def test_category_slug():
     category_example = "Testing"
 
     with app.app_context():
-        check_exists = Category.query.filter_by(name=category_example).first()
+        check_exists = CategoryService.find_category_by_name(category_example)
         if not check_exists:
             new_category = Category(name=category_example)
             db.session.add(new_category)
             db.session.commit()
 
-        result = Category.query.filter_by(name=category_example).first()
+        result = CategoryService.find_category_by_name(category_example)
         assert result.slug
 
         Category.query.filter_by(name=category_example).delete()

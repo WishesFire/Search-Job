@@ -15,9 +15,9 @@ import logging
 from flask import Blueprint, request, redirect, url_for, render_template, flash
 from flask_login import login_user, logout_user, login_required, current_user
 from flask_admin.contrib.sqla import ModelView
-from app.service.auth import util_signup, util_login
-from app.models.model import User, Vacancy
-from app import db
+from app.service.auth_service import util_signup, util_login
+from app.service.vacancy_service import VacancyService
+from app.service.user_service import UserService
 from app.configs.config import TestBaseConfig
 
 
@@ -92,12 +92,11 @@ def profile():
         data = json.loads(request.data)
         logging.info(f"Deleted data - {data['name']}")
         if data["name"]:
-            Vacancy.query.filter_by(name=data["name"], user=current_user.id).delete()
-            db.session.commit()
+            VacancyService.delete_vacancy_by_name_user(data["name"], current_user.id)
         return "Deleted"
 
     logging.info("User open profile")
-    user = User.query.filter_by(email=current_user.email).first()
+    user = UserService.find_user_by_email(current_user.email)
     content = {"user": current_user, "exists_vacancies": user.vacancies}
     return render_template("user/profile.html", **content)
 

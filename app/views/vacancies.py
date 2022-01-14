@@ -14,11 +14,13 @@ import logging
 import json
 from flask import Blueprint, render_template, request, redirect, url_for
 from flask_mail import Message
+from flask_login import current_user, login_required
 from app.configs.config import TestBaseConfig
 from app.service.validartors import VacancyFormValidator
-from flask_login import current_user, login_required
-from app.models.model import Category, Vacancy, User
-from app import db, mail
+from app.service.category_service import CategoryService
+from app.service.vacancy_service import VacancyService
+from app.service.user_service import UserService
+from app import mail
 
 
 vacancies_view = Blueprint('vacancies', __name__)
@@ -31,7 +33,7 @@ def categories_show():
     :return: rendered template
     """
     logging.info("Show all categories")
-    categories = Category.query.all()
+    categories = CategoryService.get_all_categories()
     average_salary = {}
     all_count_vacancies = 0
     for category in categories:
@@ -75,17 +77,15 @@ def vacancy_create():
         vacancy_salary = validator.check_salary()
         logging.info("Validation is DONE")
 
-        category = Category.query.filter_by(name=vacancy_category).first()
-        new_vacancy = Vacancy(name=vacancy_name, salary=vacancy_salary, info=vacancy_about,
-                              contacts=vacancy_contacts, notification=vacancy_notification,
-                              user=current_user.id, category=category.id)
-        db.session.add(new_vacancy)
-        db.session.commit()
+        category = CategoryService.find_category_by_name(vacancy_category)
+        VacancyService.create_new_vacancy(vacancy_name, vacancy_salary,
+                                          vacancy_about, vacancy_contacts,
+                                          vacancy_notification, current_user.id, category.id)
         logging.info("New vacancy created")
 
         return redirect(url_for("auth.profile"))
 
-    categories = Category.query.all()
+    categories = CategoryService.get_all_categories()
     content = {"categories": categories, "user": current_user}
     return render_template("vacancy_create.html", **content)
 
@@ -103,15 +103,14 @@ def vacancies_show(category_slug):
         if salary_average:
             logging.info(f"Salary filter get - {salary_average}")
             salary_average = float(salary_average)
-            category = Category.query.filter_by(slug=category_slug).first()
+            category = CategoryService.find_category_by_slug(category_slug)
             logging.info(f"Current category - {category.name}")
-            vacancies = Vacancy.query.filter_by(category=category.id).\
-                filter(Vacancy.salary <= salary_average).all()
+            vacancies = VacancyService.find_vacancies_by_filter(category.id, salary_average)
             logging.info(f"All filtered vacancies - {vacancies}")
             content = {"category_vacancies": vacancies, "user": current_user, "filter_flag": True}
             return render_template("vacancies.html", **content)
 
-    category = Category.query.filter_by(slug=category_slug).first()
+    category = CategoryService.find_category_by_slug(category_slug)
     content = {"category_vacancies": category, "user": current_user, "filter_flag": False}
     return render_template("vacancies.html", **content)
 
@@ -127,15 +126,15 @@ def vacancy_detail(vacancy_slug):
     if request.method == "POST":
         data = json.loads(request.data)
         if data["notification"]:
-            current_vacancy = Vacancy.query.filter_by(slug=vacancy_slug).first()
-            owner = User.query.filter_by(id=current_vacancy.user).first()
+            current_vacancy = VacancyService.find_vacancy_by_slug(vacancy_slug)
+            owner = UserService.find_user_by_id(current_vacancy.user)
             msg = Message("Someone watch your contacts", sender=TestBaseConfig.MAIL_USERNAME,
                           recipients=[owner.email])
             msg.body = f"Someone found out about your job in this vacancy - {current_vacancy.name}"
             mail.send(msg)
             return "Message sent"
 
-    current_vacancy = Vacancy.query.filter_by(slug=vacancy_slug).first()
+    current_vacancy = VacancyService.find_vacancy_by_slug(vacancy_slug)
     logging.info(f"Show vacancy detail - {current_vacancy.name}")
     content = {"vacancy": current_vacancy, "user": current_user}
     return render_template("vacancy.html", **content)
