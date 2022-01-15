@@ -111,8 +111,10 @@ def vacancies_show(category_slug):
             return render_template("vacancies.html", **content)
 
     category = CategoryService.find_category_by_slug(category_slug)
-    content = {"category_vacancies": category, "user": current_user, "filter_flag": False}
-    return render_template("vacancies.html", **content)
+    if category:
+        content = {"category_vacancies": category, "user": current_user, "filter_flag": False}
+        return render_template("vacancies.html", **content)
+    return redirect(url_for("base.home"))
 
 
 @vacancies_view.route("/vacancy/<vacancy_slug>", methods=["GET", "POST"])
@@ -128,11 +130,13 @@ def vacancy_detail(vacancy_slug):
         if data["notification"]:
             current_vacancy = VacancyService.find_vacancy_by_slug(vacancy_slug)
             owner = UserService.find_user_by_id(current_vacancy.user)
-            msg = Message("Someone watch your contacts", sender=TestBaseConfig.MAIL_USERNAME,
-                          recipients=[owner.email])
-            msg.body = f"Someone found out about your job in this vacancy - {current_vacancy.name}"
-            mail.send(msg)
-            return "Message sent"
+            if current_user.id != owner.id:
+                msg = Message("Someone watch your contacts", sender=TestBaseConfig.MAIL_USERNAME,
+                              recipients=[owner.email])
+                msg.body = f"Someone found out about your job in this vacancy - {current_vacancy.name}"
+                mail.send(msg)
+                return "Message sent"
+            return "Message don't send"
 
     current_vacancy = VacancyService.find_vacancy_by_slug(vacancy_slug)
     logging.info(f"Show vacancy detail - {current_vacancy.name}")
