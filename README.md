@@ -32,11 +32,14 @@ pip install -r requirements.txt
 ```
 ### 2. Set parameters 
 ```
+In .env
+...
 SECRET_KEY=""
 DB_USERNAME=""
 DB_PASSWORD=""
 DB_NAME=""
 JWT_SECRET_KEY="" 
+...
 ```
 ### 3. Run migrations
 ```

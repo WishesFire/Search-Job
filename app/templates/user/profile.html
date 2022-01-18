@@ -11,10 +11,14 @@
             <div class="text-white">
                 <h1 class="mb-3" style="color: grey; font-size: 65px;">Profile</h1>
                 <h1 class="mb-3" style="color: grey; font-size: 35px;">{{ user.email }}</h1>
-                <button style="background-color: #4CAF50;
-                            border: none; color: white; font-size: 36px; margin-bottom: 20px; position: absolute;
-                            left: 400px; top: 350px;
-                            padding: 25px 42px; text-align: center; text-decoration: none; border-radius: 8px;">
+                <button style="font-weight: 700;
+                      color: white;
+                      text-decoration: none;
+                      padding: .8em 1em calc(.8em + 3px);
+                      border-radius: 3px;
+                      background: rgb(64,199,129);
+                      box-shadow: 0 -3px rgb(53,167,110) inset;
+                      transition: 0.2s;;">
                     <a style="text-decoration: none;" href="{{ url_for('vacancies.vacancy_create') }}">Create</a></button>
                 {% for vac in exists_vacancies|reverse %}
                     <div class="card" style="margin-top: 15px">
