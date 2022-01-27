@@ -36,15 +36,18 @@ class VacancyService:
         return new_vacancy.id
 
     @staticmethod
-    def find_vacancies_by_filter(category_id: int, salary_average: float) -> Vacancy:
+    def find_vacancies_by_filter(category_id: int, salary_average: float,
+                                 pagination: tuple) -> Vacancy:
         """
         Takes vacancies on the price filter
         :param category_id:
         :param salary_average:
+        :param pagination:
         :return: vacancy object
         """
         return Vacancy.query.filter_by(category=category_id).\
-            filter(Vacancy.salary <= salary_average).all()
+            filter(Vacancy.salary <= salary_average)\
+            .paginate(page=pagination[0], per_page=pagination[1])
 
     @staticmethod
     def find_vacancy_by_slug(vacancy_slug: str) -> Vacancy:
@@ -76,12 +79,16 @@ class VacancyService:
         db.session.commit()
 
     @staticmethod
-    def find_vacancies_by_category(category: int) -> Vacancy:
+    def find_vacancies_by_category(category: int, pagination=None) -> Vacancy:
         """
         Takes vacancies by category
         :param category: category name
+        :param pagination: limit categories
         :return: vacancy object
         """
+        if pagination:
+            return Vacancy.query.filter_by(category=category)\
+                .paginate(page=pagination[0], per_page=pagination[1])
         return Vacancy.query.filter_by(category=category).all()
 
     @staticmethod

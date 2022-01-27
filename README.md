@@ -72,7 +72,7 @@ http://127.0.0.1:5000/vacancy_create
 ```
 Vacancies by category:
 ```
-http://127.0.0.1:5000/<category_slug>
+http://127.0.0.1:5000/<category_slug>/vacancies
 ```
 Detail vacancy:
 ```

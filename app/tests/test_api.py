@@ -97,6 +97,17 @@ def test_get_vacancies(client):
     assert response.status_code == 200
 
 
+def test_get_pagination_vacancies(client):
+    """
+    test `/api/vacancies/category_slug` (GET) - Get vacancies at slug, checking
+    number of vacancies in json.
+    :param client: cope app client
+    :return: Passed status if code is similar
+    """
+    response = client.get(f"/api/vacancies/{CATEGORY_SLUG}")
+    assert len(response.json["data"]) < 6
+
+
 def test_post_vacancy(client):
     """
     test `api/vacancies/category_slug` (POST) - Create new test vacancy

@@ -5,9 +5,11 @@ VacancyAPI - (GET, POST, PUT, DELETE)
 # pylint: disable=unused-argument
 # pylint: disable=literal-comparison
 
+from flask import request
 from flask_restful import Resource
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from app.models.model import Vacancy
+from app.configs.config import TestBaseConfig
 from app.service.category_service import CategoryService
 from app.service.vacancy_service import VacancyService
 from app.rest.serializers import vacancies_schema
@@ -32,18 +34,28 @@ class VacancyAPI(Resource):
         :param category_slug: category slug
         :return: json
         """
+        page_count = request.args.get("page", 1, type=int)
         args = vacancy_get_args.parse_args()
         category = CategoryService.find_category_by_slug(category_slug)
         if category:
             if args.get("filterSalary"):
                 filter_salary = float(args.get("filterSalary"))
-                all_vacancies = VacancyService.find_vacancies_by_filter(category.id, filter_salary)
+                all_vacancies = VacancyService\
+                    .find_vacancies_by_filter(category.id, filter_salary,
+                                              (page_count, TestBaseConfig.PAGINATION_PAGE))
                 if all_vacancies is []:
                     return {"msg": "No vacancies were found for this filter"}, 200
             else:
-                all_vacancies = VacancyService.find_vacancies_by_category(category.id)
-            vacancies_serialize = vacancies_schema.dump(all_vacancies)
-            return vacancies_serialize, 200
+                all_vacancies = VacancyService\
+                    .find_vacancies_by_category(category.id,
+                                                (page_count, TestBaseConfig.PAGINATION_PAGE))
+            meta = {
+                "page": all_vacancies.page,
+                "pages": all_vacancies.pages,
+                "total_count": all_vacancies.total,
+            }
+            vacancies_serialize = vacancies_schema.dump(all_vacancies.items)
+            return {"data": vacancies_serialize, "meta": meta}, 200
         return {"msg": "There is no such category"}, 404
 
     @classmethod

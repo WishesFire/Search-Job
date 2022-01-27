@@ -30,7 +30,7 @@ def test_status_specific_category(client):
     :param client: cope app client
     :return: Passed status if code is similar
     """
-    res = client.get("/designer")
+    res = client.get("/designer/vacancies")
     assert STATUS_CODE == res.status_code
 
 

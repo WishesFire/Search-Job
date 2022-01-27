@@ -90,7 +90,7 @@ def vacancy_create():
     return render_template("vacancy_create.html", **content)
 
 
-@vacancies_view.route("/<category_slug>", methods=["GET", "POST"])
+@vacancies_view.route("/<category_slug>/vacancies", methods=["GET", "POST"])
 def vacancies_show(category_slug):
     """
     Show vacancies specific category
@@ -98,21 +98,29 @@ def vacancies_show(category_slug):
     :param category_slug: used for url
     :return: rendered template
     """
+    page_count = request.args.get("page", 1, type=int)
     if request.method == "POST":
         salary_average = request.form.get("salary-avg")
         if salary_average:
             logging.info(f"Salary filter get - {salary_average}")
             salary_average = float(salary_average)
             category = CategoryService.find_category_by_slug(category_slug)
+            vacancies = VacancyService.find_vacancies_by_filter(
+                                          category.id, salary_average,
+                                          (page_count, TestBaseConfig.PAGINATION_PAGE))
             logging.info(f"Current category - {category.name}")
-            vacancies = VacancyService.find_vacancies_by_filter(category.id, salary_average)
             logging.info(f"All filtered vacancies - {vacancies}")
-            content = {"category_vacancies": vacancies, "user": current_user, "filter_flag": True}
+            content = {"category_vacancies": vacancies, "category_slug": category_slug,
+                       "user": current_user, "filter_flag": True}
             return render_template("vacancies.html", **content)
 
     category = CategoryService.find_category_by_slug(category_slug)
     if category:
-        content = {"category_vacancies": category, "user": current_user, "filter_flag": False}
+        vacancies = VacancyService.find_vacancies_by_category(category.id,
+                                                              (page_count,
+                                                               TestBaseConfig.PAGINATION_PAGE))
+        content = {"category_vacancies": vacancies, "category_slug": category_slug,
+                   "user": current_user, "filter_flag": False}
         return render_template("vacancies.html", **content)
     return redirect(url_for("base.home"))
 
@@ -133,7 +141,8 @@ def vacancy_detail(vacancy_slug):
             if current_user.id != owner.id:
                 msg = Message("Someone watch your contacts", sender=TestBaseConfig.MAIL_USERNAME,
                               recipients=[owner.email])
-                msg.body = f"Someone found out about your job in this vacancy - {current_vacancy.name}"
+                msg.body = f"Someone found out about your job " \
+                           f"in this vacancy - {current_vacancy.name}"
                 mail.send(msg)
                 return "Message sent"
             return "Message don't send"

@@ -49,5 +49,5 @@ def test_vacancy_filter(client):
     :param client: cope app client
     :return: Passed status if code is similar
     """
-    result = client.post("/designer", data={"salary-avg": 500})
+    result = client.post("/designer/vacancies", data={"salary-avg": 500})
     assert result.status_code == STATUS_CODE

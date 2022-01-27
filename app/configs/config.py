@@ -24,6 +24,7 @@ class TestBaseConfig(object):
     TESTING = True
     DEBUG = True
     LOGGING = False
+    PAGINATION_PAGE = 6
 
     DB_USERNAME = environ.get("DB_USERNAME")
     DB_PASSWORD = environ.get("DB_PASSWORD")
