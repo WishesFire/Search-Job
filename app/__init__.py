@@ -52,12 +52,15 @@ if TestBaseConfig.LOGGING:
                         format='%(asctime)s %(levelname)s %(name)s %(threadName)s : %(message)s')
 
 
-def create_app():
+def create_app(testing=False):
     """
     Create instance web application
     """
     app = Flask(__name__, static_url_path="", static_folder="static", template_folder="templates")
-    app.config.from_object("app.configs.config.TestBaseConfig")
+    if testing == "development":
+        app.config.from_object("app.configs.config.ProductionBaseConfig")
+    else:
+        app.config.from_object("app.configs.config.TestBaseConfig")
 
     # API
     api_bp = Blueprint("api", __name__)
