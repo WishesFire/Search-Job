@@ -6,7 +6,8 @@ RegistrationUserAPI - (POST)
 
 import datetime
 from flask_restful import Resource
-from flask_jwt_extended import jwt_required, get_jwt_identity, create_access_token
+from flask_jwt_extended import (jwt_required, get_jwt_identity,
+                                create_access_token, create_refresh_token)
 from app.rest.serializers import vacancies_schema
 from app.service.auth_service import util_signup, util_login
 from app.service.vacancy_service import VacancyService
@@ -32,7 +33,8 @@ class LoginUserAPI(Resource):
         if user_status:
             expires = datetime.timedelta(days=7)
             access_token = create_access_token(identity=str(user.id), expires_delta=expires)
-            return {"token": access_token}, 200
+            refresh_token = create_refresh_token(identity=str(user.id))
+            return {"user_id": user.id, "access_token": access_token, "refresh_token": refresh_token}, 200
 
         return {"msg": f"Something wrong - {user_error_msg}"}, 401
 

@@ -6,6 +6,7 @@ Configs for server
 """
 
 from dotenv import load_dotenv
+from dataclasses import dataclass
 from os import environ
 import os
 
@@ -15,6 +16,7 @@ load_dotenv()
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 
+@dataclass
 class TestBaseConfig(object):
     SECRET_KEY = environ.get("SECRET_KEY")
     JWT_SECRET_KEY = environ.get("JWT_SECRET_KEY")
@@ -43,6 +45,7 @@ class TestBaseConfig(object):
     ADMIN_PASSWORD = environ.get("ADMIN_PASSWORD")
 
 
+@dataclass
 class InitTestDataDB:
     CATEGORIES = {"Designer", "Accountant", "Lawyer", "Programmer",
                   "Administrator", "Driver", "Cleaner", "Seller"}
@@ -50,6 +53,7 @@ class InitTestDataDB:
     USER_PASSWORD = "fskdop1241kfspdf"
 
 
+@dataclass
 class ProductionBaseConfig(TestBaseConfig):
     DEBUG = False
     TESTING = False
