@@ -69,10 +69,10 @@ def test_signup_login(client):
 
     response = client.post("/api/auth/login", headers={"Content-Type": "application/json"},
                            data=json.dumps({"email": EMAIL, "password": PASSWORD1}))
-    LOGIN_TOKEN = response.json['token']
+    LOGIN_TOKEN = response.json['access_token']
 
     assert response.status_code == 200
-    assert response.json["token"] == LOGIN_TOKEN
+    assert response.json["access_token"] == LOGIN_TOKEN
 
 
 def test_api_profile(client):
