@@ -1,6 +1,4 @@
-# EPAM UA Python Final Project
-
-## Job search
+# Job search
 “Job search” is simple web-application which allows users to find and create vacancies for their speciality in a comfortable way.
 
 
