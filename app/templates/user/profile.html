@@ -9,7 +9,7 @@
         <div class="mask" style="background-color: #f8f9fa;">
           <div class="d-flex justify-content-center align-items-center h-100">
             <div class="text-white">
-                <h1 class="mb-3" style="color: grey; font-size: 65px;">Profile</h1>
+                <h1 class="mb-3" style="color: grey; font-size: 65px;">Профіль</h1>
                 <h1 class="mb-3" style="color: grey; font-size: 35px;">{{ user.email }}</h1>
                 <button style="font-weight: 700;
                       color: white;
@@ -19,7 +19,7 @@
                       background: rgb(64,199,129);
                       box-shadow: 0 -3px rgb(53,167,110) inset;
                       transition: 0.2s;;">
-                    <a style="text-decoration: none;" href="{{ url_for('vacancies.vacancy_create') }}">Create</a></button>
+                    <a style="text-decoration: none;" href="{{ url_for('vacancies.vacancy_create') }}">Створити</a></button>
                 {% for vac in exists_vacancies|reverse %}
                     <div class="card" style="margin-top: 15px">
                         <div class="card-body">
@@ -28,7 +28,7 @@
                                    href="{{ url_for('vacancies.vacancy_detail', vacancy_slug=vac.slug) }}">{{ vac.name }}</a>
                                 <button class="deleteMe" style="background: red; margin-left: 30px;
                                 color: #fff; border-radius: 3px;
-                                font-size: 18px; line-height: 1;">Delete</button>
+                                font-size: 18px; line-height: 1;">Видалити</button>
                             </div>
                         </div>
                     </div>

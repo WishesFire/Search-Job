@@ -1,20 +1,21 @@
 {% extends 'base.html' %}
-{% block title %}Home{% endblock %}
+{% block title %}About{% endblock %}
 {% block content %}
-    <div
-          class="p-5 text-center bg-image"
-          style="
+    <div class="p-5 text-center bg-image"
+    style="
           background-image: url('https://mdbootstrap.com/img/new/slides/041.jpg');
-          height: 500px;
+          height: 570px;
           margin-top: 70px;
         ">
         <div class="mask" style="background-color: rgba(0, 0, 0, 0.6);">
           <div class="d-flex justify-content-center align-items-center h-100">
             <div class="text-white">
-              <h1 class="mb-3">Про сам проект</h1>
-              <h4 class="mb-3">Це веб-додаток, який допомагає людям знайти роботу або створити свою власну вакансію</h4>
+              <h1 class="mb-3">Автор сайту:</h1>
+              <h4 class="mb-3">Максим Войціцький КН-208</h4>
             </div>
           </div>
         </div>
+    <img style="height: 400px; width: 300px;"
+                 src="{{ url_for('static', filename='img/author.jpg') }}" alt="Author"></a>
   </div>
 {% endblock %}

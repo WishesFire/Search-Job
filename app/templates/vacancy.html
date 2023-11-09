@@ -8,11 +8,11 @@
     <main role="main" class="container">
         <p class="slug-vacancy" style="display: none;">{{ vacancy.slug }}</p>
         <h1 class="mt-5">{{ vacancy.name }}</h1>
-        <p style="color: #0b5ed7" class="lead">Salary: {{ vacancy.salary }}</p>
-        <p style="margin-top: 25px;">Main information:</p>
+        <p style="color: #0b5ed7" class="lead">Зарплата: {{ vacancy.salary }}</p>
+        <p style="margin-top: 25px;">Головна інформація:</p>
         <p>{{ vacancy.info }}</p>
-        <p style="margin-top: 55px;">Contacts:</p>
-        <p class="content_toggle">Show contacts</p>
+        <p style="margin-top: 55px;">Контакти:</p>
+        <p class="content_toggle">Показати контакти</p>
         <p class="content_block" style="display: none;">{{ vacancy.contacts }}</p>
     </main>
 {% endblock %}

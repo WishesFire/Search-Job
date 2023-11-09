@@ -5,27 +5,27 @@
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
 
         <div class="mb-3">
-            <label for="titleFormControlInput" class="form-label">Vacancy name</label>
+            <label for="titleFormControlInput" class="form-label">Назва вакансії</label>
             <input type="text" name="name" class="form-control" id="titleFormControlInput">
         </div>
 
         <div class="mb-3">
-            <label for="salaryFormControlTextarea" class="form-label">Salary $</label>
+            <label for="salaryFormControlTextarea" class="form-label">Зарплата $</label>
             <input type="number" name="salary" class="form-control" id="salaryFormControlTextarea">
         </div>
 
         <div class="mb-3">
-            <label for="aboutFormControlTextarea" class="form-label">About vacancy</label>
+            <label for="aboutFormControlTextarea" class="form-label">Про вакансію</label>
             <textarea class="form-control" name="about" id="aboutFormControlTextarea" rows="4"></textarea>
         </div>
 
         <div class="mb-3">
-            <label for="contactFormControlTextarea" class="form-label">Contact information</label>
+            <label for="contactFormControlTextarea" class="form-label">Контактна інформація</label>
             <textarea class="form-control" name="contacts" id="contactFormControlTextarea" rows="4"></textarea>
         </div>
 
         <div class="form-check">
-          <label class="form-check-label" for="flexCheckDefault">Notify about view contacts</label>
+          <label class="form-check-label" for="flexCheckDefault">Нотифікація</label>
           <input class="form-check-input" name="notify" type="checkbox" id="flexCheckDefault">
         </div>
 
@@ -35,6 +35,6 @@
             {% endfor %}
         </select>
 
-        <button style="margin-top: 30px;" type="submit" class="btn btn-primary">Submit</button>
+        <button style="margin-top: 30px;" type="submit" class="btn btn-primary">Створити</button>
     </form>
 {% endblock %}

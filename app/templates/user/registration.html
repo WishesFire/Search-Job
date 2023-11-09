@@ -7,14 +7,14 @@
       <div class="col-12 col-lg-9 col-xl-7">
         <div class="card shadow-2-strong card-registration" style="border-radius: 15px;">
           <div class="card-body p-4 p-md-5">
-            <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Registration Form</h3>
+            <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Реєстрація</h3>
             <form method="post">
               <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
 
               <div class="row">
                 <div class="col-md-6 mb-4">
                   <div class="form-outline">
-                    <label class="form-label" for="emailAddress">Email</label>
+                    <label class="form-label" for="emailAddress">Емейл:</label>
                     <input type="email" id="emailAddress" name="emailAddress" class="form-control form-control-lg" />
                   </div>
                 </div>
@@ -23,7 +23,7 @@
               <div class="row">
                 <div class="col-md-6 mb-4">
                   <div class="form-outline">
-                    <label class="form-label" for="password1">Password</label>
+                    <label class="form-label" for="password1">Пароль:</label>
                     <input type="password" id="password1" name="password1" class="form-control form-control-lg" />
                   </div>
                 </div>
@@ -32,7 +32,7 @@
               <div class="row">
                 <div class="col-md-6 mb-4">
                   <div class="form-outline">
-                    <label class="form-label" for="password2">Confirm password</label>
+                    <label class="form-label" for="password2">Підтвердити пароль:</label>
                     <input type="password" id="password2" name="password2" class="form-control form-control-lg" />
                   </div>
                 </div>

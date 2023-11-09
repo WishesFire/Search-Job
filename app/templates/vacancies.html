@@ -4,13 +4,13 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
 {% endblock %}
 {% block content %}
-    <h1 class="categories-title">Vacancies</h1>
+    <h1 class="categories-title">Вакансії</h1>
     {% if filter_flag %}
         {% for vac in category_vacancies.items|reverse %}
             <div class="card" style="width: 800px;">
               <h5 class="card-header">{{ vac.name }}</h5>
               <div class="card-body">
-                <h5 class="card-title">Salary: {{ vac.salary }}$</h5>
+                <h5 class="card-title">Зарплата: {{ vac.salary }}$</h5>
                 <p class="card-text" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ vac.info }}</p>
                 <a href="{{ url_for('vacancies.vacancy_detail', vacancy_slug=vac.slug) }}" class="btn btn-primary">Go</a>
               </div>
@@ -21,7 +21,7 @@
             <div class="card" style="width: 800px;">
               <h5 class="card-header">{{ vac.name }}</h5>
               <div class="card-body">
-                <h5 class="card-title">Salary: {{ vac.salary }}$</h5>
+                <h5 class="card-title">Зарплата: {{ vac.salary }}$</h5>
                 <p class="card-text" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ vac.info }}</p>
                 <a href="{{ url_for('vacancies.vacancy_detail', vacancy_slug=vac.slug) }}" class="btn btn-primary">Go</a>
               </div>
@@ -30,7 +30,7 @@
     {% endif %}
     <div>
         <article class="card-group-item" style="position: absolute; left: 1200px; bottom: 650px;">
-            <header class="card-header"><h6 class="title">Average salary</h6></header>
+            <header class="card-header"><h6 class="title">Середня зарплата</h6></header>
             <div class="filter-content">
                 <div class="card-body">
                     <form method="post">
@@ -61,7 +61,7 @@
                           <span class="form-check-label">6500$</span>
                         </label>
 
-                        <button style="position: absolute; right: 480px; top: 120px;" type="submit" class="btn btn-primary">Filter</button>
+                        <button style="position: absolute; right: 480px; top: 120px;" type="submit" class="btn btn-primary">Фільтер</button>
                     </form>
                 </div>
             </div>

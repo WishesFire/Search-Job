@@ -6,6 +6,7 @@ from .views.main import base_view
 from .views.vacancies import vacancies_view
 from .views.user import auth_view
 from .views.error import error_view
+from .views.about import about_view
 
 from .rest.main_api import TestConnection
 from .rest.categories_api import CategoryAPI
@@ -20,6 +21,9 @@ def register_handlers(app):
 
     # (`/` - main page)
     app.register_blueprint(base_view, url_prefix="/")
+
+    # ('/about' - about page)
+    app.register_blueprint(about_view, url_prefix="/")
 
     # (`/categories`, `/vacancy_create`, `/<category_slug>`, `/vacancy/<vacancy_slug>`)
     app.register_blueprint(vacancies_view, url_prefix="/")

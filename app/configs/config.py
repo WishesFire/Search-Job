@@ -31,7 +31,7 @@ class TestBaseConfig(object):
     DB_USERNAME = environ.get("DB_USERNAME")
     DB_PASSWORD = environ.get("DB_PASSWORD")
     DB_NAME = environ.get("DB_NAME")
-    SQLALCHEMY_DATABASE_URI = f"mysql+pymysql://{DB_USERNAME}:{DB_PASSWORD}@localhost/{DB_NAME}"
+    SQLALCHEMY_DATABASE_URI = f"postgresql+psycopg2://{DB_USERNAME}:{DB_PASSWORD}@localhost/{DB_NAME}"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     MAIL_SERVER = "smtp.gmail.com"
